@@ -306,6 +306,14 @@
     border-bottom-left-radius: 0.3cm;
 }
 
+.categoryCloud-tags a:only-of-type:hover{
+    background: var(--accent-menu-hover-two);
+    border-top-left-radius: 0.3cm;
+    border-top-right-radius: 0.3cm;
+    border-bottom-right-radius: 0.3cm;
+    border-bottom-left-radius: 0.3cm;
+}
+
 .widget-archive--list .archives-year:hover {
     background: var(--accent-menu-hover);
 }

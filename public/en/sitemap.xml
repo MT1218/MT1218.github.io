@@ -103,8 +103,6 @@
   </url><url>
     <loc>http://localhost:1313/about/</loc>
   </url><url>
-    <loc>http://localhost:1313/categories/coding-projects/</loc>
-  </url><url>
     <loc>http://localhost:1313/search/</loc>
   </url>
 </urlset>
