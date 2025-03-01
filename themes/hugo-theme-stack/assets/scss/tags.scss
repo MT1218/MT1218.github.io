@@ -1,0 +1,49 @@
+/* assets/scss/tags.scss */
+
+.tags-title {
+    color: var(--accent-color);
+}
+
+.tag-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+    font-size: 1.5rem;
+}
+
+.post-count {
+    color: var(--accent-color);
+}
+
+/* Styling for the Tag List */
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;  /* Reduce the gap between tags */
+    justify-content: center;
+    margin: 10px 0;
+    padding-left: 0;
+}
+
+.tag-list li {
+    list-style-type: none;
+    padding: 10px 20px;  /* Reduce padding for smaller tags */
+    background-color: var(--card-background);
+    border-radius: 20px;
+    white-space: nowrap; 
+}
+
+.tag-list a {
+    color: #3498db;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.tag-list a:hover {
+    text-decoration: underline;
+}
+
+.tag-list li:hover {
+    background-color: var(--card-background-hover);
+}
+  

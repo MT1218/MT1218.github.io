@@ -1,0 +1,31 @@
+{{ define "head" }}
+    {{ $css := resources.Get "scss/tags.scss" | toCSS | minify }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{ end }}
+
+{{ define "main" }}
+  <!-- Display only the title of the tag -->
+  <h1 class="tags-title">
+    <a href="/">Home</a> /
+    {{ .Title }}
+  </h1>
+
+  <!-- List of tags with the number of posts -->
+  <ul class="tag-list">
+    {{ range .Site.Taxonomies.tags }}
+      <li class="tag-item">
+        <!-- Tag Name -->
+        <a href="{{ .Page.Permalink }}" class="tag-name">{{ .Page.Title }}</a>
+        <!-- Number of Posts -->
+        <div class="post-count">{{ .Count }}</div>
+      </li>
+    {{ end }}
+  </ul>
+
+  <!-- Include footer -->
+  {{ partialCached "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}

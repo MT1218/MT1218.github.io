@@ -1,0 +1,32 @@
+{{- $title := .Title -}}
+{{- $siteTitle := .Site.Title -}}
+
+{{- if .IsHome -}}
+    <!-- Homepage, and it's pagination -->
+
+    <!-- Build paginator -->
+    {{ $pages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+    {{ $notHidden := where .Site.RegularPages "Params.hidden" "!=" true }}
+    {{ $filtered := ($pages | intersect $notHidden) }}
+    {{ $pag := .Paginate ($filtered) }}
+
+    {{ $title = $siteTitle}}
+{{- else if eq .Kind "term" -}}
+    <!-- Taxonomy page -->
+
+    <!-- Build paginator -->
+    {{ $notHidden := where .Pages "Params.hidden" "!=" true }}
+    {{ $pag := .Paginate ($notHidden) }}
+
+    <!-- {TAXONOMY_TYPE}: {TAXONOMY_TERM} -->
+    {{ $title = slice (title .Data.Singular) ": " $title }}
+
+    {{ if .Paginator.HasPrev }}
+        <!-- Add page number-->
+        {{ $title = $title | append ""}}
+    {{ end }} 
+
+    {{ $title = delimit $title "" }}
+{{- end -}}
+
+{{ return $title }}

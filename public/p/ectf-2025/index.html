@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="A jeopardy CTF competition">
+<title>ECTF 2025 Writeup</title>
+
+<link rel='canonical' href='http://localhost:1313/p/ectf-2025/'>
+
+<link rel="stylesheet" href="/scss/style.min.bbc587661b5eb80ffb1ab9a282cd634cfac6824bb0ea05b3da3c618fafead346.css"><meta property='og:title' content="ECTF 2025 Writeup">
+<meta property='og:description' content="A jeopardy CTF competition">
+<meta property='og:url' content='http://localhost:1313/p/ectf-2025/'>
+<meta property='og:site_name' content='MT12'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CTF Jeopardy' /><meta property='article:tag' content='Cryptography' /><meta property='article:tag' content='Forensics' /><meta property='article:tag' content='Hardware' /><meta property='article:tag' content='OSINT' /><meta property='article:tag' content='Steganography' /><meta property='article:tag' content='Web' /><meta property='article:published_time' content='2025-02-04T10:00:00&#43;11:00'/><meta property='article:modified_time' content='2025-02-04T10:00:00&#43;11:00'/><meta property='og:image' content='http://localhost:1313/p/ectf-2025/cover.png' />
+<meta name="twitter:title" content="ECTF 2025 Writeup">
+<meta name="twitter:description" content="A jeopardy CTF competition"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/p/ectf-2025/cover.png' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide|Sofia|Trirong|Exo+2">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu16584542358284784499.jpg" width="300"
+                            height="299" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">MT12</a></h1>
+            <h2 class="site-description">Software Engineering and Cyber Security Student</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/MT1218'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://linkedin.com/in/manav-thobhani-352018266'
+                        target="_blank"
+                        title="LinkedIn"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50" width="50px" height="50px">
+    <path d="M 9 4 C 6.2504839 4 4 6.2504839 4 9 L 4 41 C 
+    4 43.749516 6.2504839 46 9 46 L 41 46 C 43.749516 46 46 43.749516 46 
+    41 L 46 9 C 46 6.2504839 43.749516 4 41 4 L 9 4 z M 9 6 L 41 6 C 42.668484 
+    6 44 7.3315161 44 9 L 44 41 C 44 42.668484 42.668484 44 41 44 L 9 44 C 7.3315161 
+    44 6 42.668484 6 41 L 6 9 C 6 7.3315161 7.3315161 6 9 6 z M 14 11.011719 C 12.904779 
+    11.011719 11.919219 11.339079 11.189453 11.953125 C 10.459687 12.567171 10.011719 
+    13.484511 10.011719 14.466797 C 10.011719 16.333977 11.631285 17.789609 13.691406 
+    17.933594 A 0.98809878 0.98809878 0 0 0 13.695312 17.935547 A 0.98809878 0.98809878 0 0 0 14 
+    17.988281 C 16.27301 17.988281 17.988281 16.396083 17.988281 14.466797 A 0.98809878 0.98809878 
+    0 0 0 17.986328 14.414062 C 17.884577 12.513831 16.190443 11.011719 14 11.011719 z M 14 12.988281 
+    C 15.392231 12.988281 15.94197 13.610038 16.001953 14.492188 C 15.989803 15.348434 15.460091 16.011719 
+    14 16.011719 C 12.614594 16.011719 11.988281 15.302225 11.988281 14.466797 C 11.988281 14.049083 
+    12.140703 13.734298 12.460938 13.464844 C 12.78117 13.19539 13.295221 12.988281 14 12.988281 z 
+    M 11 19 A 1.0001 1.0001 0 0 0 10 20 L 10 39 A 1.0001 1.0001 0 0 0 11 40 L 17 40 A 1.0001 
+    1.0001 0 0 0 18 39 L 18 33.134766 L 18 20 A 1.0001 1.0001 0 0 0 17 19 L 11 19 z M 20 19 A 1.0001 
+    1.0001 0 0 0 19 20 L 19 39 A 1.0001 1.0001 0 0 0 20 40 L 26 40 A 1.0001 1.0001 0 0 0 27 39 L 27 29 C 27 28.170333 27.226394 27.345035 27.625 26.804688 C 
+    28.023606 26.264339 28.526466 25.940057 29.482422 25.957031 C 30.468166 25.973981 30.989999 26.311669 31.384766 26.841797 C 31.779532 27.371924 32 28.166667 
+    32 29 L 32 39 A 1.0001 1.0001 0 0 0 33 40 L 39 40 A 1.0001 1.0001 0 0 0 40 39 L 40 28.261719 C 40 25.300181 39.122788 22.95433 37.619141 21.367188 C 36.115493 
+    19.780044 34.024172 19 31.8125 19 C 29.710483 19 28.110853 19.704889 27 20.423828 L 27 20 A 1.0001 1.0001 0 0 0 26 19 L 20 19 z M 12 21 L 16 21 L 16 33.134766 L 16 38 L 12 
+    38 L 12 21 z M 21 21 L 25 21 L 25 22.560547 A 1.0001 1.0001 0 0 0 26.798828 23.162109 C 26.798828 23.162109 28.369194 21 31.8125 21 C 33.565828 21 35.069366 21.582581 36.167969 22.742188 C 
+    37.266572 23.901794 38 25.688257 38 28.261719 L 38 38 L 34 38 L 34 29 C 34 27.833333 33.720468 26.627107 32.990234 25.646484 C 32.260001 24.665862 31.031834 23.983076 29.517578 23.957031 C 
+    27.995534 23.930001 26.747519 24.626988 26.015625 25.619141 C 25.283731 26.611293 25 27.829667 25 29 L 25 38 L 21 38 L 21 21 z" stroke="#000000" stroke-width="0.75"/>
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                    
+                    <span>Home</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/about/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                    
+                    <span>About</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/archives/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                    
+                    <span>Archives</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/categories/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 50 50" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 5 4 C 3.3544268 4 2 5.3555411 2 7 L 2 16 L 2 26 L 2 43 C 2 44.644459 3.3544268 46 5 46 L 45 46 C 46.645063 46 48 44.645063 48 43 L 48 26 L 48 16 L 48 11 C 48 9.3549372 46.645063 8 45 8 L 18 8 C 18.08657 8 17.96899 8.000364 17.724609 7.71875 C 17.480227 7.437136 17.179419 6.9699412 16.865234 6.46875 C 16.55105 5.9675588 16.221777 5.4327899 15.806641 4.9628906 C 15.391504 4.4929914 14.818754 4 14 4 L 5 4 z M 5 6 L 14 6 C 13.93925 6 14.06114 6.00701 14.308594 6.2871094 C 14.556051 6.5672101 14.857231 7.0324412 15.169922 7.53125 C 15.482613 8.0300588 15.806429 8.562864 16.212891 9.03125 C 16.619352 9.499636 17.178927 10 18 10 L 45 10 C 45.562937 10 46 10.437063 46 11 L 46 13.1875 C 45.685108 13.07394 45.351843 13 45 13 L 5 13 C 4.6481575 13 4.3148915 13.07394 4 13.1875 L 4 7 C 4 6.4364589 4.4355732 6 5 6 z M 5 15 L 45 15 C 45.56503 15 46 15.43497 46 16 L 46 26 L 46 43 C 46 43.562937 45.562937 44 45 44 L 5 44 C 4.4355732 44 4 43.563541 4 43 L 4 26 L 4 16 C 4 15.43497 4.4349698 15 5 15 z"/>
+</svg>
+
+
+
+                    
+                    <span>Categories</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/tags/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                    
+                    <span>Tags</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/search/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                    
+                    <span>Search</span>
+                </a>
+            </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#cryptography">Cryptography</a>
+      <ol>
+        <li><a href="#ascii-me-anything-but-the-flag">ASCII me anything but the flag</a></li>
+        <li><a href="#cracking-the-vault">Cracking the Vault</a></li>
+        <li><a href="#rsa-intro">RSA Intro</a></li>
+        <li><a href="#oiiaioiiai-">OIIAIOIIAI 😼</a></li>
+      </ol>
+    </li>
+    <li><a href="#forensics">Forensics</a>
+      <ol>
+        <li><a href="#justapcap">Justapcap</a></li>
+        <li><a href="#my-dearest">My Dearest</a></li>
+        <li><a href="#capture-the-hidden">Capture the Hidden</a></li>
+      </ol>
+    </li>
+    <li><a href="#hardware">Hardware</a>
+      <ol>
+        <li><a href="#orbit">ORbit</a></li>
+        <li><a href="#it-is-trivial">It is Trivial</a></li>
+      </ol>
+    </li>
+    <li><a href="#osint">OSINT</a>
+      <ol>
+        <li><a href="#project-153-q1">Project-153-Q1</a></li>
+        <li><a href="#project-153-q2">Project-153-Q2</a></li>
+        <li><a href="#project-153-q4">Project-153-Q4</a></li>
+        <li><a href="#project-153-q5">Project-153-Q5</a></li>
+        <li><a href="#project-153-q6">Project-153-Q6</a></li>
+      </ol>
+    </li>
+    <li><a href="#steganography">Steganography</a>
+      <ol>
+        <li><a href="#silhouette-in-cyberpunk">Silhouette in Cyberpunk</a></li>
+      </ol>
+    </li>
+    <li><a href="#web">Web</a>
+      <ol>
+        <li><a href="#java-weak-token">Java Weak Token</a></li>
+      </ol>
+    </li>
+    <li><a href="#thank-you">Thank You</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/ectf-2025/">
+                <img src="/p/ectf-2025/cover_hu9998561168795740396.png"
+                        srcset="/p/ectf-2025/cover_hu9998561168795740396.png 800w, /p/ectf-2025/cover_hu15394836587816260824.png 1600w"
+                        width="800" 
+                        height="408" 
+                        loading="lazy"
+                        alt="Featured image of post ECTF 2025 Writeup" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/ectf-2025/">ECTF 2025 Writeup</a>
+        </h2>
+        
+        
+        <h3 class="article-subtitle">
+            A jeopardy CTF competition
+        </h3>
+        
+    </div>
+
+    
+    <header class="article-category">
+        <svg xmlns="http://www.w3.org/2000/svg" class="article-category-logo" width="28" height="28" viewBox="0 0 50 50" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 5 4 C 3.3544268 4 2 5.3555411 2 7 L 2 16 L 2 26 L 2 43 C 2 44.644459 3.3544268 46 5 46 L 45 46 C 46.645063 46 48 44.645063 48 43 L 48 26 L 48 16 L 48 11 C 48 9.3549372 46.645063 8 45 8 L 18 8 C 18.08657 8 17.96899 8.000364 17.724609 7.71875 C 17.480227 7.437136 17.179419 6.9699412 16.865234 6.46875 C 16.55105 5.9675588 16.221777 5.4327899 15.806641 4.9628906 C 15.391504 4.4929914 14.818754 4 14 4 L 5 4 z M 5 6 L 14 6 C 13.93925 6 14.06114 6.00701 14.308594 6.2871094 C 14.556051 6.5672101 14.857231 7.0324412 15.169922 7.53125 C 15.482613 8.0300588 15.806429 8.562864 16.212891 9.03125 C 16.619352 9.499636 17.178927 10 18 10 L 45 10 C 45.562937 10 46 10.437063 46 11 L 46 13.1875 C 45.685108 13.07394 45.351843 13 45 13 L 5 13 C 4.6481575 13 4.3148915 13.07394 4 13.1875 L 4 7 C 4 6.4364589 4.4355732 6 5 6 z M 5 15 L 45 15 C 45.56503 15 46 15.43497 46 16 L 46 26 L 46 43 C 46 43.562937 45.562937 44 45 44 L 5 44 C 4.4355732 44 4 43.563541 4 43 L 4 26 L 4 16 C 4 15.43497 4.4349698 15 5 15 z"/>
+        </svg>            
+        
+            <a class = "article-category-button" href="/categories/ctfs/" >
+                CTFs
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 04, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    13 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>Over the weekend, I solo participated in the 48-hour ECTF. I ranked 53rd out of 383 teams. Massive thanks to the <a class="link" href="https://ctftime.org/team/299061"  target="_blank" rel="noopener"
+    >Cyber &amp; Chill</a> team for hosting this CTF.</p>
+<h1 id="cryptography">Cryptography
+</h1><h2 id="ascii-me-anything-but-the-flag">ASCII me anything but the flag
+</h2><blockquote>
+<p><strong>Description</strong>: There is an encrypted flag, good luck with that I encrypted it well!</p>
+<p>108 100 111 109 123 85 99 49 122 95 106 53 95 79 111 51 95 88 52 116 95 48 109 95 51 111 88 121 90 107 97 106 48 105 125 10 10 69 98 111 98 32 102 112 32 118 108 114 111 32 104 98 118 44 32 100 108 108 97 32 105 114 122 104 32 58 32 72 66 86 72 66 86 10 10 87 101 108 108 32 100 111 110 101 44 32 98 117 116 32 110 111 119 32 100 111 32 121 111 117 32 107 110 111 119 32 97 98 111 117 116 32 116 104 101 32 103 117 121 32 119 104 111 32 103 111 116 32 115 116 97 98 98 101 100 32 50 51 32 116 105 109 101 115 32 63</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Antoine</p>
+</blockquote>
+<p>Looking at the range of numbers, my first guess was to convert them to ASCII.</p>
+<p><img src="/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/ASCII_Convert.png"
+	width="867"
+	height="754"
+	srcset="/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/ASCII_Convert_hu6419592164574085233.png 480w, /p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/ASCII_Convert_hu5287047074670757022.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="114"
+		data-flex-basis="275px"
+	
+></p>
+<p>I guessed correct. From the conversion, the first two lines are still encrypted somehow but the last line hints towards what the next step is. Julius Caesar was stabbed 23 times so the next step must be to use the Caesar cipher.</p>
+<p>Putting the second line (<code>Ebob fp vlro hbv, dlla irzh : HBVHBV</code>) into Cyberchef with a variation of the Caesar Cipher (ROT47) to decipher the text gives the result:</p>
+<p><img src="/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Caeser.png"
+	width="1912"
+	height="910"
+	srcset="/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Caeser_hu8565717453848421952.png 480w, /p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Caeser_hu2065326530423394296.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="504px"
+	
+></p>
+<p>Now we have a key: <code>KEYKEY</code>. Using Cyberchef again, and the first line from the ASCII conversion (<code>ldom{Uc1z_j5_Oo3_X4t_0m_3oXyZkaj0i}</code>) we can use Vigenère decipher to get the flag:</p>
+<p><img src="/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Flag.png"
+	width="1914"
+	height="910"
+	srcset="/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Flag_hu109478489776034267.png 480w, /p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Flag_hu14260509171965222501.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="210"
+		data-flex-basis="504px"
+	
+></p>
+<p>Flag: <code>ectf{Th1s_i5_Th3_W4y_0f_3nCrYpti0n}</code></p>
+<h2 id="cracking-the-vault">Cracking the Vault
+</h2><blockquote>
+<p><strong>Description</strong>: The vault is locked with a key, but we&rsquo;ve managed to access a security computer. Unfortunately, the key is encrypted, and the owner forgot to remove the file that encrypts it. It appears to be some sort of homemade encryption, but don’t worry this should be a piece of cake for you, right?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Antoine</p>
+</blockquote>
+<p>For this challenge, there are two files. A python file which has an encryption function and a text file which is most likely the output of the python file.</p>
+<p><strong>Encryption.py</strong>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">secrets</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">encryption</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">encrypted</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">random</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">SystemRandom</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">padding_length</span> <span class="o">=</span> <span class="mi">256</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">    <span class="n">raw_padding</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">126</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">padding_length</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">scrambled_padding</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">%</span> <span class="mi">94</span> <span class="o">+</span> <span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">raw_padding</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shifted_padding</span> <span class="o">=</span> <span class="n">scrambled_padding</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">padded_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shifted_padding</span><span class="p">)</span> <span class="o">+</span> <span class="n">text</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">final_padded_text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">chr</span><span class="p">((</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">^</span> <span class="mi">42</span><span class="p">)</span> <span class="o">%</span> <span class="mi">94</span> <span class="o">+</span> <span class="mi">32</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">c</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">padded_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">secret_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">secret_key</span> <span class="o">=</span> <span class="n">secret_key</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">hashed_key</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">secret_key</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hashed_key</span><span class="p">[:</span><span class="mi">16</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">random</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">SystemRandom</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">char_code</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">shift</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">        <span class="n">transformed</span> <span class="o">=</span> <span class="p">(</span><span class="n">char_code</span> <span class="o">+</span> <span class="n">shift</span> <span class="o">+</span> <span class="mi">67</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">        <span class="n">encrypted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">transformed</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">encrypted</span><span class="p">),</span> <span class="n">seed</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;VaultKey.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">encrypted_text</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">encryption</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;VaultKey_encrypted.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">encrypted_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;The file has been successfully encrypted!&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>From the code it&rsquo;s clear that the encryption function must be reversed and run on the text file to get the flag. At first I was a bit confused on how to approach this but going through the code I saw that there are a lot of red herrings. The main encryption that is happening to the original flag text is:</p>
+<ul>
+<li>Convert each character to its ASCII value.</li>
+<li>Calculate a shift value based on the character&rsquo;s position.</li>
+<li>Add the shift value and 67 to the ASCII value the mod it by 256.</li>
+<li>Add this ASCII value to the final encrypted text.</li>
+</ul>
+<p>Using this information, the decryption function can be created:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decryption</span><span class="p">(</span><span class="n">encrypted_text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">decrypted</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">encrypted_text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">char_code</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">shift</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">        <span class="n">transformed</span> <span class="o">=</span> <span class="p">(</span><span class="n">char_code</span> <span class="o">-</span> <span class="mi">67</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">        <span class="n">decrypted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">transformed</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decrypted</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;filepath_to_VaultKey_encrypted.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">encrypted_text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">encrypted_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">decrypted_text</span> <span class="o">=</span> <span class="n">decryption</span><span class="p">(</span><span class="n">encrypted_text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">decrypted_text</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Running this python function on the provided encrypted file gives:</p>
+<p><img src="/p/ectf-2025/Cryptography/SOLVED-Crypto_3_-_Cracking_the_Vault/Output.png"
+	width="676"
+	height="59"
+	srcset="/p/ectf-2025/Cryptography/SOLVED-Crypto_3_-_Cracking_the_Vault/Output_hu10978000450574556311.png 480w, /p/ectf-2025/Cryptography/SOLVED-Crypto_3_-_Cracking_the_Vault/Output_hu2227583558820617836.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1145"
+		data-flex-basis="2749px"
+	
+></p>
+<p>Flag: <code>ectf{1t_W45_ju5T_4_m1nu5}</code></p>
+<h2 id="rsa-intro">RSA Intro
+</h2><blockquote>
+<p><strong>Description</strong>: This is just a brief introduction to RSA nothing more nothing less.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Antoine</p>
+</blockquote>
+<p>This challenge was pretty straightforward. We are given a text file that has <strong>n</strong>, <strong>e</strong> and <strong>c</strong>. So the RSA encryption can be easily reversed by putting the given values into a RSA deciphering tool:</p>
+<p><img src="/p/ectf-2025/Cryptography/SOLVED-Crypto_4_-_output/Decipher.png"
+	width="1670"
+	height="708"
+	srcset="/p/ectf-2025/Cryptography/SOLVED-Crypto_4_-_output/Decipher_hu11622781922496041834.png 480w, /p/ectf-2025/Cryptography/SOLVED-Crypto_4_-_output/Decipher_hu3495774658166996130.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="235"
+		data-flex-basis="566px"
+	
+></p>
+<p>Flag: <code>ectf{b4sic_F4cT0rDb_rS4}</code></p>
+<h2 id="oiiaioiiai-">OIIAIOIIAI 😼
+</h2><blockquote>
+<p><strong>Description</strong>: The cat made a mess of the flag , I have to retrieve the flag or my boss will be mad.</p>
+<p>}eYcbt4fB{<em>yD0nUu_05Rp_1TNh_GM13R</em></p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Antoine</p>
+</blockquote>
+<p>Given the challenge name, the text has been encrypted by some sort of &lsquo;spinning&rsquo; or &rsquo;turning&rsquo;. After some trial and error with different combinations of decrpytion on Cyberchef, I noticed something interesting. Starting from the second character in the encrypted text, skipping every other letter gives &rsquo;ectf&rsquo;. The first half of the flag is every even character and the second half is every odd character. I reversed this in python:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="nb">input</span> <span class="o">=</span> <span class="s2">&#34;}eYcbt4fB{_yD0nUu_05Rp_1TNh_GM13R_&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">+=</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">input</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">+=</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">reverseString</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">17</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[:</span><span class="mi">17</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">reverseString</span> <span class="o">=</span> <span class="n">reverseString</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">result</span> <span class="o">+=</span> <span class="n">reverseString</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Flag: <code>ectf{y0U_5p1N_M3_R1GhT_R0unD_B4bY}</code></p>
+<h1 id="forensics">Forensics
+</h1><h2 id="justapcap">Justapcap
+</h2><blockquote>
+<p><strong>Description</strong>: An image has been stolen, can you find it in the PCAP file?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Greg</p>
+</blockquote>
+<p>For this challenge, we are given a pcap file. At first glance, opening this in Wireshark, I can see that the file is just a whole lot of DNS messages sent from the same source and sent to the same destination.</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/Wireshark.png"
+	width="1919"
+	height="1034"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/Wireshark_hu121989047808131629.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/Wireshark_hu12780556255949721009.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>After inspecting the first few lines of the pcap file, I noticed that the body of the first DNS request matched the hex file signature of a PNG file (<code>89 50 4E 47 0D 0A 1A 0A</code>).</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/pngSignature.png"
+	width="975"
+	height="691"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/pngSignature_hu12860790535426332473.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/pngSignature_hu11837888545058662783.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="141"
+		data-flex-basis="338px"
+	
+></p>
+<p>To get the actual image, I needed to extract all the lines without the words &ldquo;exfil&rdquo; or &ldquo;attacker&rdquo; in them. After doing this, I noticed that the number &ldquo;2&rdquo; was at the start of every row so I used the <code>cut</code> command to get rid of this.</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/extractHex.png"
+	width="643"
+	height="380"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/extractHex_hu8523124241165551996.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/extractHex_hu17861347713872169747.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="169"
+		data-flex-basis="406px"
+	
+></p>
+<p>However the file still wasn&rsquo;t being recognised as a proper PNG file and I started feeling like I hit a wall. After much investigation, I decided to have a look at it manually in notepad and noticed that there were many junk lines that needed to be removed.</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/junkLines.png"
+	width="837"
+	height="993"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/junkLines_hu17975942721132300591.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/junkLines_hu13459135386005729296.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="84"
+		data-flex-basis="202px"
+	
+></p>
+<p>After manually removing these lines, I reversed the hex dump using:</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/reverseHexDump.png"
+	width="643"
+	height="53"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/reverseHexDump_hu12889306775673698201.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/reverseHexDump_hu17530274923419943250.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="1213"
+		data-flex-basis="2911px"
+	
+></p>
+<p>Opening binImage.png gave:</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/binImage.png"
+	width="1152"
+	height="648"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/binImage_hu13109875505672559368.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/binImage_hu231855398621294039.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>Flag: <code>ectf{DN5_3xf1ltr@t10n_15_f1nd3d}</code></p>
+<h2 id="my-dearest">My Dearest
+</h2><blockquote>
+<p><strong>Description</strong>: I have Received a love letter by a fake email. Can you help me to find who is the author?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Greg</p>
+</blockquote>
+<p>This one was pretty straightforward. We are given a word document and need to submit the author&rsquo;s name as the flag. I did this through exiftool.</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic_5_-_My_dearest/exiftool.png"
+	width="1110"
+	height="811"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic_5_-_My_dearest/exiftool_hu8511523982140235717.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic_5_-_My_dearest/exiftool_hu6327347416158666547.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="136"
+		data-flex-basis="328px"
+	
+></p>
+<p>Flag: <code>ectf{MichelTeller}</code></p>
+<h2 id="capture-the-hidden">Capture the Hidden
+</h2><blockquote>
+<p><strong>Description</strong>: A cybersecurity agent intercepted suspicious network traffic before disappearing. The attackers attempted to erase their tracks, but a PCAP file was recovered.</p>
+<p>Somewhere within these packets, a crucial file was exfiltrated. Can you analyze the traffic, extract the hidden data, and uncover the secret message?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Greg</p>
+</blockquote>
+<p>This challenge wasn&rsquo;t too bad either. Looking at the pcap file, 3 TCP messages instantly stand out. Right before the first TCP message is sent, a FTP request is sent with the username as &ldquo;hacker&rdquo;.</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/wireshark.png"
+	width="1909"
+	height="882"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/wireshark_hu9900164058085611626.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/wireshark_hu4608033422110964727.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="519px"
+	
+></p>
+<p>A couple of lines before this FTP message, a POST request is sent to the same destination. Looking at the body of this POST request, there seems to be some sort of encrypted data, my first guess being base64.</p>
+<p><img src="/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/decrypt.png"
+	width="1916"
+	height="914"
+	srcset="/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/decrypt_hu13484816319353295993.png 480w, /p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/decrypt_hu1026931665789652751.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="503px"
+	
+></p>
+<p>Flag: <code>ectf{P05t_1s_v3ry_345y_T0_F1ND}</code></p>
+<h1 id="hardware">Hardware
+</h1><h2 id="orbit">ORbit
+</h2><blockquote>
+<p><strong>Description</strong>: You are given a logic circuit (see orbit.png) and asked to give the binary output corresponding to the input such that (x0, x1, x2, x3, x4) = (0, 1, 0, 1, 0). Surround your answer with ectf{ } to obtain the flag.</p>
+<p>As an example, entering (x0, x1, x2, x3, x4) = (1, 0, 0, 0, 0) gives (y0, y1, y2, y3, y4, y5, y6), so the flag would be ectf{1111010}.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Loïc</p>
+</blockquote>
+<p>This challenge was really fun and different to the challenges I&rsquo;ve done before. We are given a logic diagram and an input and need to find the output.</p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/logicDiagram.png"
+	width="1029"
+	height="1452"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/logicDiagram_hu4499966904511491793.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/logicDiagram_hu5947565473487133693.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="70"
+		data-flex-basis="170px"
+	
+></p>
+<p>I thought about doing this using some sort of simulator website but ended up doing the calculations by hand. I first labelled all the AND gates (can be seen in the image) to make it easier when doing the calculations.</p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/calculations.jpg"
+	width="3238"
+	height="2322"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/calculations_hu11278588534704958374.jpg 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/calculations_hu7504416397493142650.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="139"
+		data-flex-basis="334px"
+	
+></p>
+<p>Doing this by hand was probably not the best way, since it&rsquo;s pretty easy to mess up as I did on the left page and had to recalculate the values of y. In the end I was able to get the right values of y and as a result the right flag.</p>
+<p>Flag: <code>ectf{0101011}</code></p>
+<h2 id="it-is-trivial">It is Trivial
+</h2><blockquote>
+<p><strong>Description</strong>: I forgot to write down the description for this challenge but it was just the previous challenge but way more complex. The input is 30478191278.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Loïc</p>
+</blockquote>
+<p>Same scenario again, but this time it&rsquo;s much harder.</p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/logicDiagram.png"
+	width="1225"
+	height="2176"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/logicDiagram_hu17729088589059014366.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/logicDiagram_hu13694640377496549513.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="56"
+		data-flex-basis="135px"
+	
+></p>
+<p>This time I decided to use <a class="link" href="https://logic.ly/"  target="_blank" rel="noopener"
+    >logic.ly</a>. Since it was even more easy to mess up for this challenge, I labelled all the gates according to their column. This way I would be able to cross check the gates by labelling them in logic.ly.</p>
+<p>Looking at the diagram, I was a bit confused on how the number that was given would become the input. On the diagram, I noticed that 6 digit binary numbers were being used to produce the output in each &ldquo;block&rdquo;. There would be a carry over bit for the next block, which linked the whole circuit diagram. I then converted the given number into binary but the number of digits wasn&rsquo;t a multiple of 6 (it was 35). This was solved by adding an extra 0 at the start of the converted binary number: <code>011100011000101001000100101010101110</code>. I could split this up into blocks of 6 bits and input them into logic.ly.</p>
+<p>Now came the tedious part, recreating the diagram. After a lot of time clicking away and rechecking I was able to replicate the logic circuit from the diagram.</p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/1.png"
+	width="1199"
+	height="451"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/1_hu8172264240040549408.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/1_hu14099382421260358254.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="265"
+		data-flex-basis="638px"
+	
+></p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/2.png"
+	width="1182"
+	height="379"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/2_hu5385682262719593372.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/2_hu7273580485428458890.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="311"
+		data-flex-basis="748px"
+	
+></p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/3.png"
+	width="1150"
+	height="398"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/3_hu18076878112320917518.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/3_hu5504626015959669027.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="288"
+		data-flex-basis="693px"
+	
+></p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/4.png"
+	width="1117"
+	height="308"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/4_hu4758077888304142136.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/4_hu3210500256554815253.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="362"
+		data-flex-basis="870px"
+	
+></p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/5.png"
+	width="1159"
+	height="333"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/5_hu240815065272317457.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/5_hu13294118613344698908.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="348"
+		data-flex-basis="835px"
+	
+></p>
+<p><img src="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/6.png"
+	width="1113"
+	height="322"
+	srcset="/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/6_hu15340411872469989243.png 480w, /p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/6_hu1629941389854373770.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="345"
+		data-flex-basis="829px"
+	
+></p>
+<p>I used switches to set the input (off is 0 and on is 1) and lights for the output. I somehow got lucky and had the correct output on the first go!</p>
+<p>Flag: <code>ectf{100010011000}</code></p>
+<h1 id="osint">OSINT
+</h1><h2 id="project-153-q1">Project-153-Q1
+</h2><blockquote>
+<p><strong>Description</strong>:</p>
+<p>Thomas Yatangaki : Have you ever visited this place ? I can&rsquo;t remember the name&hellip;
+Maboi 💪 : Me neither 😕</p>
+</blockquote>
+<p><img src="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-1/challenge.jpg"
+	width="3968"
+	height="2976"
+	srcset="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-1/challenge_hu15063631147757945683.jpg 480w, /p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-1/challenge_hu3202676783738190097.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="320px"
+	
+></p>
+<p>This first OSINT challenge was easy. Google searching the image returned the location of the place.</p>
+<p>Flag: <code>ectf{Chutes_du_Caramy}</code></p>
+<blockquote>
+<p><strong>Author</strong>: Egan</p>
+</blockquote>
+<h2 id="project-153-q2">Project-153-Q2
+</h2><blockquote>
+<p><strong>Description</strong>:</p>
+<p>Thomas Yatangaki : Did you know that the exact position where I took the photo had a name ? It is such an interesting place full of history 😮.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Egan</p>
+</blockquote>
+<p><img src="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-2/challenge.jpg"
+	width="4208"
+	height="3120"
+	srcset="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-2/challenge_hu16917564730710701637.jpg 480w, /p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-2/challenge_hu858188917367675854.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="323px"
+	
+></p>
+<p>This challenge took some time since it wasn&rsquo;t straightforward. Reverse searching the image, we get a mountain range in France known as <code>Massif de l'Esterel</code>. However this wasn&rsquo;t the right flag.</p>
+<p>Going through the search results, there are a lot of matches but none that give any hint as to what the flag could be. Maybe if I found the exact place of the photo, there might be a hint.</p>
+<p>I found this flicker <a class="link" href="https://www.flickr.com/photos/jmenj/23878898442"  target="_blank" rel="noopener"
+    >post</a>, which was geo-tagged. Going to this exact <a class="link" href="https://www.google.com/maps/search/Antheor-Cap-Roux,&#43;c%C3%B4te&#43;rocheuse/@43.4475326,6.9050344,15z/data=!3m1!4b1?hl=en-US&amp;entry=ttu&amp;g_ep=EgoyMDI1MDIyNi4xIKXMDSoASAFQAw%3D%3D"  target="_blank" rel="noopener"
+    >place</a> in Google Maps and going into street view at this <a class="link" href="https://www.google.com/maps/@43.4487237,6.9182804,3a,75y,194.95h,88.45t/data=!3m8!1e1!3m6!1sAF1QipPxgLu2VmPUZFcJlTkKdQANUfD0JakceY-8b49j!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fp%2FAF1QipPxgLu2VmPUZFcJlTkKdQANUfD0JakceY-8b49j%3Dw900-h600-k-no-pi1.5456572426063104-ya337.94733492539604-ro0-fo100!7i10240!8i5120?hl=en-US&amp;entry=ttu&amp;g_ep=EgoyMDI1MDIyNi4xIKXMDSoASAFQAw%3D%3D"  target="_blank" rel="noopener"
+    >point</a>, I can see that it is the exact place and the name of this place is Pointe de l&rsquo;Observatoire. This happens to be the flag!</p>
+<p>Flag: <code>ectf{Pointe_de_l'Observatoire}</code></p>
+<h2 id="project-153-q4">Project-153-Q4
+</h2><blockquote>
+<p><strong>Description</strong>:</p>
+<p>Thomas Yatangaki : Bro, I think, we did the gr90 the wrong way round.</p>
+<p>Maboi 💪 : damn 💀 At least, the view was better at the end. Wait, do you see the place in the background in the middle ? We&rsquo;ve got to get over there, what&rsquo;s the name?</p>
+<p>Thomas Yatangaki : No I don&rsquo;t think we should 💀.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Egan</p>
+</blockquote>
+<p><img src="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-4/challenge.jpg"
+	width="4000"
+	height="3000"
+	srcset="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-4/challenge_hu324278540753998554.jpg 480w, /p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-4/challenge_hu5311726614131937998.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="320px"
+	
+></p>
+<p>I needed to find the name of the mounts in the background of the image. Reverse searching this image using Google Lens, I&rsquo;m able to find the name of the place in a <a class="link" href="https://sr.wikiloc.com/rute-pjesacenje-po-planinama/bormes-les-mimosas-notre-dame-de-constance-32828412"  target="_blank" rel="noopener"
+    >post</a> on a hiking website.</p>
+<p>I then went into Google Maps and searched <code>Chapelle Notre-Dame de Constance</code>. Going into street view, the <a class="link" href="https://www.google.com/maps/@43.1561787,6.3401265,3a,15.7y,134.04h,87.72t/data=!3m11!1e1!3m9!1sAF1QipNSbPcBAbMGunpAaaK-qP273ScI0AKbc32O1_wU!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fp%2FAF1QipNSbPcBAbMGunpAaaK-qP273ScI0AKbc32O1_wU%3Dw900-h600-k-no-pi2.2848220531248984-ya38.03703992759836-ro0-fo100!7i10240!8i5120!9m2!1b1!2i40?entry=ttu&amp;g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D"  target="_blank" rel="noopener"
+    >chapel</a> seems like the right place since I can see two islands in the back. Zooming all the way out on Maps, I see the name of the two islands, one of them being the flag.</p>
+<p>Flag: <code>ectf{Île_du_Levant}</code></p>
+<h2 id="project-153-q5">Project-153-Q5
+</h2><blockquote>
+<p><strong>Description</strong>:</p>
+<p>Maboi 💪 : Bruh, the name of the mountain where I was lmao 🧠.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Egan</p>
+</blockquote>
+<p><img src="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-5/challenge.jpg"
+	width="13776"
+	height="3712"
+	srcset="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-5/challenge_hu13462420755189228566.jpg 480w, /p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-5/challenge_hu3424068340185527852.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="371"
+		data-flex-basis="890px"
+	
+></p>
+<p>For this challenge, I had to crop the image since it was too big for searching on Google. Once cropped I was able to find this AllTrails <a class="link" href="https://www.alltrails.com/trail/france/var/pointe-du-cerveau-et-le-gros-cerveau-vtt"  target="_blank" rel="noopener"
+    >post</a>, which gave the name of the mountain.</p>
+<p>Flag: <code>ectf{Gros_Cerveau}</code></p>
+<h2 id="project-153-q6">Project-153-Q6
+</h2><blockquote>
+<p><strong>Description</strong>:</p>
+<p>Thomas Yatangaki : unfortunately, it&rsquo;s not part of project 153, but it&rsquo;s still very beautiful here 😻.</p>
+<p>Maboi 💪 : How many steps were there again ?</p>
+<p>Flag format: ectf{number_zipcodeofthetown}</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Egan</p>
+</blockquote>
+<p><img src="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-6/challenge.jpg"
+	width="4000"
+	height="3000"
+	srcset="/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-6/challenge_hu1112167876129387261.jpg 480w, /p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-6/challenge_hu7185983741220741408.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="133"
+		data-flex-basis="320px"
+	
+></p>
+<p>This challenge was two-fold. I had to find the number of stairs in the image and also the zip code of the place. I was able to find this <a class="link" href="https://www.dreamstime.com/editorial-image-sunny-street-shops-restaurants-moustiers-sainte-marie-france-july-lovely-village-image97861020"  target="_blank" rel="noopener"
+    >page</a> which gave the name of the place; Notre Dame de Beauvoir. Using this, I found the number of stairs on this <a class="link" href="https://provence-alpes-cotedazur.com/en/things-to-do/culture-and-heritage/places/chapelle-notre-dame-de-beauvoir-moustiers-sainte-marie-en-4067124/"  target="_blank" rel="noopener"
+    >website</a>. Finally, I used maps to get the postcode of the place.</p>
+<p>Flag: <code>ectf{262_04360}</code></p>
+<h1 id="steganography">Steganography
+</h1><h2 id="silhouette-in-cyberpunk">Silhouette in Cyberpunk
+</h2><blockquote>
+<p><strong>Description</strong>: I didn&rsquo;t write down the description for this challenge but it was something to do with the given image.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Antoine</p>
+</blockquote>
+<p><img src="/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/challenge.png"
+	width="1777"
+	height="1001"
+	srcset="/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/challenge_hu3569809714886899866.png 480w, /p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/challenge_hu7940863817532860431.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="177"
+		data-flex-basis="426px"
+	
+></p>
+<p>This challenge was different, confusing at first but very fun. I used all the common stega tools (stegsolve, binwalk, exiftool) but nothing gave any clue. I had a closer look at the image and saw that there were dots on two of the buildings. I had a hunch that it was Braille (I don&rsquo;t know how I thought about this as I&rsquo;ve never seen the syntax of Braille). I had guessed correctly!</p>
+<p>Using a <a class="link" href="https://abcbraille.com/braille"  target="_blank" rel="noopener"
+    >Braille convertor</a> and the dots from the first building I was able to get the first message.</p>
+<p><img src="/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/first.png"
+	width="83"
+	height="309"
+	srcset="/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/first_hu1012899334013595393.png 480w, /p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/first_hu12101752191281690483.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="26"
+		data-flex-basis="64px"
+	
+></p>
+<p>⠹⠊⠎
+⠊⠎
+⠚⠥⠌
+⠁
+⠙⠥⠍
+⠍⠽⠂
+⠝⠊
+⠉⠑
+⠞⠗⠽ = this
+is
+just
+a
+dum
+my,
+ni
+ce
+try</p>
+<p>Now I knew that I was on the right track.</p>
+<p>I did the same with the building in the back left:</p>
+<p>⠓⠼⠁⠙
+⠙⠼⠉⠝
+⠼⠁⠝
+⠹⠼⠉
+⠙⠼⠙
+⠗⠅⠝⠼
+⠉⠎⠎ = h14
+d3n
+1n
+th3
+d4
+rkn
+3ss</p>
+<p>Flag: <code>ectf{h1dd3n_1n_th3_d4rkn3ss}</code></p>
+<h1 id="web">Web
+</h1><h2 id="java-weak-token">Java Weak Token
+</h2><blockquote>
+<p><strong>Description</strong>: The admin has stored a flag in the admin section, but he let you access the page since he has secured the access to it. Maybe you should show him why using a weak secret isn&rsquo;t a good idea 🙂.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: Louis</p>
+</blockquote>
+<p>For this challenge, the following website is presented:</p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/1.png"
+	width="1891"
+	height="857"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/1_hu4693837729555597743.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/1_hu1755179982714152187.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="220"
+		data-flex-basis="529px"
+	
+></p>
+<p>We are shown our JWT token and somehow need to use this information to access the admin page. Going into Burp Suite, I can see that this exact token is being sent for authorisation.</p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/2.png"
+	width="1285"
+	height="400"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/2_hu13867841927541777351.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/2_hu3309345383118994785.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="321"
+		data-flex-basis="771px"
+	
+></p>
+<p>I used <a class="link" href="https://github.com/lmammino/jwt-cracker"  target="_blank" rel="noopener"
+    >this</a> JWT cracker to find out what the secret is to maybe modify the JWT and pretend to be the admin.</p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/3.png"
+	width="1088"
+	height="226"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/3_hu11175601476372622146.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/3_hu14026956711088325389.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="481"
+		data-flex-basis="1155px"
+	
+></p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/4.png"
+	width="546"
+	height="145"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/4_hu16480324874758276209.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/4_hu2296503325743282390.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="376"
+		data-flex-basis="903px"
+	
+></p>
+<p>Let&rsquo;s go! We got the secret. I can now modify the token using <a class="link" href="https://jwt.io/"  target="_blank" rel="noopener"
+    >jwt.io</a>.</p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/5.png"
+	width="1699"
+	height="945"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/5_hu10490793613671787761.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/5_hu393349552520622489.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="179"
+		data-flex-basis="431px"
+	
+></p>
+<p>I used the default HS256 algorithm, entered the secret and changed the username to admin. Next, I clicked on the &ldquo;Can I access the admin page?&rdquo; button and intercepted the request and replaced my token with the modified token.</p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/6.png"
+	width="1616"
+	height="729"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/6_hu18090041393338485656.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/6_hu11278750534809840955.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="221"
+		data-flex-basis="532px"
+	
+></p>
+<p>And after hitting forward:</p>
+<p><img src="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/7.png"
+	width="1672"
+	height="423"
+	srcset="/p/ectf-2025/Web/SOLVED-Java-Weak-Token/7_hu8826140171023596714.png 480w, /p/ectf-2025/Web/SOLVED-Java-Weak-Token/7_hu8127108942755966571.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="395"
+		data-flex-basis="948px"
+	
+></p>
+<p>Flag: <code>ectf{JwT_T0keN_cR34t0r}</code></p>
+<h1 id="thank-you">Thank You
+</h1><p>If you’ve made it this far, I hope you’ve enjoyed this writeup and thank you for reading it! Thanks again to the <a class="link" href="https://ctftime.org/team/299061"  target="_blank" rel="noopener"
+    >Cyber &amp; Chill</a> team for organising this CTF.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+        <section class = "article-tags">
+            <div class = "article-tag-details">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+                    <circle cx="9" cy="9" r="2" />
+                </svg>
+                <div class = "article-tags">
+                    
+    <section class="article-tags">
+        
+            <a href="/tags/ctf-jeopardy/">CTF Jeopardy</a>
+        
+            <a href="/tags/cryptography/">Cryptography</a>
+        
+            <a href="/tags/forensics/">Forensics</a>
+        
+            <a href="/tags/hardware/">Hardware</a>
+        
+            <a href="/tags/osint/">OSINT</a>
+        
+            <a href="/tags/steganography/">Steganography</a>
+        
+            <a href="/tags/web/">Web</a>
+        
+    </section>
+
+                </div>
+            </div>
+        </section>
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <circle cx="12" cy="12" r="9" />
+            <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+        </svg>
+          
+        <span><a href = "https://creativecommons.org/licenses/by/4.0/">This post is licensed under CC BY 4.0</a></span>
+    </section>
+    
+</footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/knightctf-2025/">
+        
+        
+            <div class="article-image">
+                <img src="/p/knightctf-2025/cover.83053cb3ea6e8c52acf69b53c1febc10_hu8859026959530649553.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post KnightCTF 2025 Writeup"
+                        data-key="knightCTF-2025" 
+                        data-hash="md5-gwU8s&#43;pujFKs9ptTwf68EA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">KnightCTF 2025 Writeup</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 MT12. Some rights reserved.
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.e325941d7b205fb50e25a3de4ae429974741be23020c813dace578d935e0007a.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

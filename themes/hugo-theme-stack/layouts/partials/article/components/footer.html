@@ -1,0 +1,28 @@
+<footer class="article-footer">
+    {{ if .Params.tags }}
+        <section class = "article-tags">
+            <div class = "article-tag-details">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+                    <circle cx="9" cy="9" r="2" />
+                </svg>
+                <div class = "article-tags">
+                    {{ partial "article/components/tags" . }}
+                </div>
+            </div>
+        </section>
+    {{ end }}
+
+    {{ if and (.Site.Params.article.license.enabled) (not (eq .Params.license false)) }}
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <circle cx="12" cy="12" r="9" />
+            <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+        </svg>
+          
+        <span><a href = "https://creativecommons.org/licenses/by/4.0/">{{ default .Site.Params.article.license.default .Params.license | markdownify }}</a></span>
+    </section>
+    {{ end }}
+</footer>

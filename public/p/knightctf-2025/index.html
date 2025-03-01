@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="A jeopardy CTF competition">
+<title>KnightCTF 2025 Writeup</title>
+
+<link rel='canonical' href='http://localhost:1313/p/knightctf-2025/'>
+
+<link rel="stylesheet" href="/scss/style.min.bbc587661b5eb80ffb1ab9a282cd634cfac6824bb0ea05b3da3c618fafead346.css"><meta property='og:title' content="KnightCTF 2025 Writeup">
+<meta property='og:description' content="A jeopardy CTF competition">
+<meta property='og:url' content='http://localhost:1313/p/knightctf-2025/'>
+<meta property='og:site_name' content='MT12'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CTF Jeopardy' /><meta property='article:tag' content='Web' /><meta property='article:tag' content='Networks' /><meta property='article:tag' content='Reverse Engineering' /><meta property='article:tag' content='Pwn' /><meta property='article:tag' content='OSINT' /><meta property='article:tag' content='Cryptography' /><meta property='article:published_time' content='2025-01-22T14:00:00&#43;11:00'/><meta property='article:modified_time' content='2025-01-22T14:00:00&#43;11:00'/><meta property='og:image' content='http://localhost:1313/p/knightctf-2025/cover.png' />
+<meta name="twitter:title" content="KnightCTF 2025 Writeup">
+<meta name="twitter:description" content="A jeopardy CTF competition"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/p/knightctf-2025/cover.png' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide|Sofia|Trirong|Exo+2">
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu16584542358284784499.jpg" width="300"
+                            height="299" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">MT12</a></h1>
+            <h2 class="site-description">Software Engineering and Cyber Security Student</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/MT1218'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://linkedin.com/in/manav-thobhani-352018266'
+                        target="_blank"
+                        title="LinkedIn"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50" width="50px" height="50px">
+    <path d="M 9 4 C 6.2504839 4 4 6.2504839 4 9 L 4 41 C 
+    4 43.749516 6.2504839 46 9 46 L 41 46 C 43.749516 46 46 43.749516 46 
+    41 L 46 9 C 46 6.2504839 43.749516 4 41 4 L 9 4 z M 9 6 L 41 6 C 42.668484 
+    6 44 7.3315161 44 9 L 44 41 C 44 42.668484 42.668484 44 41 44 L 9 44 C 7.3315161 
+    44 6 42.668484 6 41 L 6 9 C 6 7.3315161 7.3315161 6 9 6 z M 14 11.011719 C 12.904779 
+    11.011719 11.919219 11.339079 11.189453 11.953125 C 10.459687 12.567171 10.011719 
+    13.484511 10.011719 14.466797 C 10.011719 16.333977 11.631285 17.789609 13.691406 
+    17.933594 A 0.98809878 0.98809878 0 0 0 13.695312 17.935547 A 0.98809878 0.98809878 0 0 0 14 
+    17.988281 C 16.27301 17.988281 17.988281 16.396083 17.988281 14.466797 A 0.98809878 0.98809878 
+    0 0 0 17.986328 14.414062 C 17.884577 12.513831 16.190443 11.011719 14 11.011719 z M 14 12.988281 
+    C 15.392231 12.988281 15.94197 13.610038 16.001953 14.492188 C 15.989803 15.348434 15.460091 16.011719 
+    14 16.011719 C 12.614594 16.011719 11.988281 15.302225 11.988281 14.466797 C 11.988281 14.049083 
+    12.140703 13.734298 12.460938 13.464844 C 12.78117 13.19539 13.295221 12.988281 14 12.988281 z 
+    M 11 19 A 1.0001 1.0001 0 0 0 10 20 L 10 39 A 1.0001 1.0001 0 0 0 11 40 L 17 40 A 1.0001 
+    1.0001 0 0 0 18 39 L 18 33.134766 L 18 20 A 1.0001 1.0001 0 0 0 17 19 L 11 19 z M 20 19 A 1.0001 
+    1.0001 0 0 0 19 20 L 19 39 A 1.0001 1.0001 0 0 0 20 40 L 26 40 A 1.0001 1.0001 0 0 0 27 39 L 27 29 C 27 28.170333 27.226394 27.345035 27.625 26.804688 C 
+    28.023606 26.264339 28.526466 25.940057 29.482422 25.957031 C 30.468166 25.973981 30.989999 26.311669 31.384766 26.841797 C 31.779532 27.371924 32 28.166667 
+    32 29 L 32 39 A 1.0001 1.0001 0 0 0 33 40 L 39 40 A 1.0001 1.0001 0 0 0 40 39 L 40 28.261719 C 40 25.300181 39.122788 22.95433 37.619141 21.367188 C 36.115493 
+    19.780044 34.024172 19 31.8125 19 C 29.710483 19 28.110853 19.704889 27 20.423828 L 27 20 A 1.0001 1.0001 0 0 0 26 19 L 20 19 z M 12 21 L 16 21 L 16 33.134766 L 16 38 L 12 
+    38 L 12 21 z M 21 21 L 25 21 L 25 22.560547 A 1.0001 1.0001 0 0 0 26.798828 23.162109 C 26.798828 23.162109 28.369194 21 31.8125 21 C 33.565828 21 35.069366 21.582581 36.167969 22.742188 C 
+    37.266572 23.901794 38 25.688257 38 28.261719 L 38 38 L 34 38 L 34 29 C 34 27.833333 33.720468 26.627107 32.990234 25.646484 C 32.260001 24.665862 31.031834 23.983076 29.517578 23.957031 C 
+    27.995534 23.930001 26.747519 24.626988 26.015625 25.619141 C 25.283731 26.611293 25 27.829667 25 29 L 25 38 L 21 38 L 21 21 z" stroke="#000000" stroke-width="0.75"/>
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                    
+                    <span>Home</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/about/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                    
+                    <span>About</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/archives/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                    
+                    <span>Archives</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/categories/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 50 50" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M 5 4 C 3.3544268 4 2 5.3555411 2 7 L 2 16 L 2 26 L 2 43 C 2 44.644459 3.3544268 46 5 46 L 45 46 C 46.645063 46 48 44.645063 48 43 L 48 26 L 48 16 L 48 11 C 48 9.3549372 46.645063 8 45 8 L 18 8 C 18.08657 8 17.96899 8.000364 17.724609 7.71875 C 17.480227 7.437136 17.179419 6.9699412 16.865234 6.46875 C 16.55105 5.9675588 16.221777 5.4327899 15.806641 4.9628906 C 15.391504 4.4929914 14.818754 4 14 4 L 5 4 z M 5 6 L 14 6 C 13.93925 6 14.06114 6.00701 14.308594 6.2871094 C 14.556051 6.5672101 14.857231 7.0324412 15.169922 7.53125 C 15.482613 8.0300588 15.806429 8.562864 16.212891 9.03125 C 16.619352 9.499636 17.178927 10 18 10 L 45 10 C 45.562937 10 46 10.437063 46 11 L 46 13.1875 C 45.685108 13.07394 45.351843 13 45 13 L 5 13 C 4.6481575 13 4.3148915 13.07394 4 13.1875 L 4 7 C 4 6.4364589 4.4355732 6 5 6 z M 5 15 L 45 15 C 45.56503 15 46 15.43497 46 16 L 46 26 L 46 43 C 46 43.562937 45.562937 44 45 44 L 5 44 C 4.4355732 44 4 43.563541 4 43 L 4 26 L 4 16 C 4 15.43497 4.4349698 15 5 15 z"/>
+</svg>
+
+
+
+                    
+                    <span>Categories</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/tags/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-tag" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+  <circle cx="9" cy="9" r="2" />
+</svg>
+
+
+
+                    
+                    <span>Tags</span>
+                </a>
+            </li>
+        
+            
+            <li  class = "sidebar-item">
+                <a href='/search/' >
+                    
+                    
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                    
+                    <span>Search</span>
+                </a>
+            </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+        
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#reverse-engineering">Reverse Engineering</a>
+      <ol>
+        <li><a href="#binary-quest">Binary Quest</a></li>
+        <li><a href="#easy-path-to-the-grail">Easy Path to the Grail</a></li>
+        <li><a href="#knights-droid">Knight&rsquo;s Droid</a></li>
+      </ol>
+    </li>
+    <li><a href="#web">Web</a>
+      <ol>
+        <li><a href="#knightcal">KnightCal</a></li>
+      </ol>
+    </li>
+    <li><a href="#cryptography">Cryptography</a>
+      <ol>
+        <li><a href="#reflections-in-the-random">Reflections in the Random</a></li>
+        <li><a href="#forward-yet-it-falls-back">Forward, Yet It Falls Back</a></li>
+      </ol>
+    </li>
+    <li><a href="#networks">Networks</a>
+      <ol>
+        <li><a href="#server--attacker-ip">Server &amp; Attacker IP</a></li>
+        <li><a href="#the-intruders-identity">The Intruder&rsquo;s Identity</a></li>
+        <li><a href="#the-real-admin">The Real Admin</a></li>
+        <li><a href="#compromising-the-admin">Compromising the Admin</a></li>
+      </ol>
+    </li>
+    <li><a href="#pwn">PWN</a>
+      <ol>
+        <li><a href="#knights-bank">Knight&rsquo;s Bank</a></li>
+        <li><a href="#knights-secret">Knight&rsquo;s Secret</a></li>
+      </ol>
+    </li>
+    <li><a href="#osint">OSINT</a>
+      <ol>
+        <li><a href="#the-hidden-quest">The Hidden Quest</a></li>
+      </ol>
+    </li>
+    <li><a href="#thank-you">Thank You</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/knightctf-2025/">
+                <img src="/p/knightctf-2025/cover_hu2906841868491695866.png"
+                        srcset="/p/knightctf-2025/cover_hu2906841868491695866.png 800w, /p/knightctf-2025/cover_hu3944815519965481628.png 1600w"
+                        width="800" 
+                        height="414" 
+                        loading="lazy"
+                        alt="Featured image of post KnightCTF 2025 Writeup" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/knightctf-2025/">KnightCTF 2025 Writeup</a>
+        </h2>
+        
+        
+        <h3 class="article-subtitle">
+            A jeopardy CTF competition
+        </h3>
+        
+    </div>
+
+    
+    <header class="article-category">
+        <svg xmlns="http://www.w3.org/2000/svg" class="article-category-logo" width="28" height="28" viewBox="0 0 50 50" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 5 4 C 3.3544268 4 2 5.3555411 2 7 L 2 16 L 2 26 L 2 43 C 2 44.644459 3.3544268 46 5 46 L 45 46 C 46.645063 46 48 44.645063 48 43 L 48 26 L 48 16 L 48 11 C 48 9.3549372 46.645063 8 45 8 L 18 8 C 18.08657 8 17.96899 8.000364 17.724609 7.71875 C 17.480227 7.437136 17.179419 6.9699412 16.865234 6.46875 C 16.55105 5.9675588 16.221777 5.4327899 15.806641 4.9628906 C 15.391504 4.4929914 14.818754 4 14 4 L 5 4 z M 5 6 L 14 6 C 13.93925 6 14.06114 6.00701 14.308594 6.2871094 C 14.556051 6.5672101 14.857231 7.0324412 15.169922 7.53125 C 15.482613 8.0300588 15.806429 8.562864 16.212891 9.03125 C 16.619352 9.499636 17.178927 10 18 10 L 45 10 C 45.562937 10 46 10.437063 46 11 L 46 13.1875 C 45.685108 13.07394 45.351843 13 45 13 L 5 13 C 4.6481575 13 4.3148915 13.07394 4 13.1875 L 4 7 C 4 6.4364589 4.4355732 6 5 6 z M 5 15 L 45 15 C 45.56503 15 46 15.43497 46 16 L 46 26 L 46 43 C 46 43.562937 45.562937 44 45 44 L 5 44 C 4.4355732 44 4 43.563541 4 43 L 4 26 L 4 16 C 4 15.43497 4.4349698 15 5 15 z"/>
+        </svg>            
+        
+            <a class = "article-category-button" href="/categories/ctfs/" >
+                CTFs
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 22, 2025</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    15 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>I recently solo participated in the 24-hour KnightCTF. I placed 197th out of the 759 teams. Huge thanks to the <a class="link" href="https://knightctf.com/"  target="_blank" rel="noopener"
+    >Knight Squad</a> for hosting this really fun CTF.</p>
+<h1 id="reverse-engineering">Reverse Engineering
+</h1><h2 id="binary-quest">Binary Quest
+</h2><blockquote>
+<p><strong>Description</strong>: In the far-off kingdom of Valoria, an ancient relic called the “Sacred Flag” lies hidden within a guarded fortress. Legend says only a true knight of cunning and skill can lay claim to its power. Dare you venture into the shadows and emerge victorious? Your journey begins now—onward, brave soul, and seize your destiny in the Binary Quest.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>For this challenge, we are given a binary file called <code>binary.quest</code>. Before trying open it in Ghidra, I decided to run the <code>strings</code> command on the file to see if anything interesting comes up. The following came up:</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Binary_Quest/UPX.png"
+	width="871"
+	height="196"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Binary_Quest/UPX_hu6972227358367108965.png 480w, /p/knightctf-2025/Reverse_Engineering/Binary_Quest/UPX_hu1984798623555130825.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="444"
+		data-flex-basis="1066px"
+	
+></p>
+<p>This file has been packed with <code>UPX V4.24</code>. After a bit of research, I found out that there is a UPX tool available to unpack the file, which I installed using the command <code>sudo apt install upx</code>. I then unpacked the file using <code>upx -d binary.quest</code>. I was now able to open the file using Ghidra to understand how the file works.</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Binary_Quest/Ghidra1.png"
+	width="937"
+	height="888"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Binary_Quest/Ghidra1_hu7813350928835853846.png 480w, /p/knightctf-2025/Reverse_Engineering/Binary_Quest/Ghidra1_hu3353594746170649058.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="105"
+		data-flex-basis="253px"
+	
+></p>
+<p>Most of the functions weren&rsquo;t interesting but <code>FUN_00101Oa0</code> seemed to be the way to go. The logic that checks if the users&rsquo; input matches the flag is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Enter the sacred flag to complete your quest: &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_00102356</span><span class="p">,</span><span class="n">local_58</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">sVar2</span> <span class="o">=</span> <span class="nf">strlen</span><span class="p">(</span><span class="n">local_58</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">FUN_00101330</span><span class="p">(</span><span class="n">local_58</span><span class="p">,</span><span class="n">sVar2</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">iVar1</span> <span class="o">=</span> <span class="nf">strcmp</span><span class="p">(</span><span class="n">local_58</span><span class="p">,</span><span class="n">local_98</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">You have proven your valor, oh noble knight!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;The kingdom rejoices at your triumph, and the hidden flag is indeed yours.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">Alas, you have failed this time. The quest remains unfulfilled...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Return stronger and try again, brave knight.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The program checks if the users&rsquo; input (<code>local__58</code>) is equal to the variable <code>local_98</code>, which contains the flag.
+Looking at lines 42-45 we can see what the value of <code>local_98</code> is, alongside two other variables:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">  <span class="n">local_88</span><span class="p">.</span><span class="n">_0_4_</span> <span class="o">=</span> <span class="mh">0x7d5f3f59</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">local_98</span><span class="p">.</span><span class="n">_8_4_</span> <span class="o">=</span> <span class="mh">0x37695f73</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">local_98</span><span class="p">.</span><span class="n">_0_8_</span> <span class="o">=</span> <span class="mh">0x34575f7b4654434b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">uStack_8c</span> <span class="o">=</span> <span class="mh">0x7334655f</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Decoding these hex values using CyberChef we get the following:</p>
+<ul>
+<li><code>local_88._0_4_ = }_?Y</code></li>
+<li><code>local_98._8_4_ = 7i_s</code></li>
+<li><code>local_98._0_8_ = 4W_{FTCK</code></li>
+<li><code>uStack_8c = s4e_</code></li>
+</ul>
+<p><code>FTCK</code> is <code>KCTF</code> backwards which is the format of the flags, so these values need to reversed and concatenated to get the flag.</p>
+<p>Flag: <code>KCTF{_W4s_i7_e4sY?_}</code></p>
+<h2 id="easy-path-to-the-grail">Easy Path to the Grail
+</h2><blockquote>
+<p><strong>Description</strong>: Brave knight, your quest is simple yet essential—unlock the secrets hidden in this binary challenge and tread the path to the grail. The journey will test your wits as you reverse the provided binary, uncovering the treasure within.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>For this challenge, we are given a binary file called <code>grail.knight</code>. Running <code>strings</code> on the file doesn&rsquo;t return anything interesting so I opened it in Ghidra. This time there are a few interesting functions <code>main</code>, <code>transforming_input</code> and <code>do_fight</code>.</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/Ghidra1.png"
+	width="1013"
+	height="782"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/Ghidra1_hu8702330924789208276.png 480w, /p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/Ghidra1_hu5589627663304046841.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="310px"
+	
+></p>
+<p>Inside the <code>main</code> function, the program takes in the users&rsquo; input (<code>local_198</code>), runs the <code>transform_input</code> function with the parameters as  <code>local_198</code> and  <code>local_118</code> which is an empty variable. It then checks if  <code>local_118</code> is equal to some string value. If it is, then the users&rsquo; input is the correct flag.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Enter the password (the original flag): &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">iVar1</span> <span class="o">=</span> <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%127s&#34;</span><span class="p">,</span><span class="n">local_198</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">transform_input</span><span class="p">(</span><span class="n">local_198</span><span class="p">,</span><span class="n">local_118</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">iVar1</span> <span class="o">=</span> <span class="nf">strcmp</span><span class="p">(</span><span class="n">local_118</span><span class="p">,</span><span class="s">&#34;D2C22A62DEA62CCE9EFA0ECC86CE9AFA4ECC6EFAC6162C3636CC76E6A6BE&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Correct! The flag is %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span><span class="n">local_198</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Wrong password!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Looking at <code>transform_input</code>, we can see:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">transform_input</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">param_1</span><span class="p">,</span><span class="kt">char</span> <span class="o">*</span><span class="n">param_2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">byte</span> <span class="n">bVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="o">*</span><span class="n">local_28</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="o">*</span><span class="n">local_20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">local_28</span> <span class="o">=</span> <span class="n">param_2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="n">local_20</span> <span class="o">=</span> <span class="n">param_1</span><span class="p">;</span> <span class="o">*</span><span class="n">local_20</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span> <span class="n">local_20</span> <span class="o">=</span> <span class="n">local_20</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bVar1</span> <span class="o">=</span> <span class="nf">do_fight</span><span class="p">(</span><span class="o">*</span><span class="n">local_20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">sprintf</span><span class="p">(</span><span class="n">local_28</span><span class="p">,</span><span class="s">&#34;%02X&#34;</span><span class="p">,(</span><span class="n">ulong</span><span class="p">)</span><span class="n">bVar1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">local_28</span> <span class="o">=</span> <span class="n">local_28</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="o">*</span><span class="n">local_28</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This function calls the <code>do_fight</code> function, likely doing some sort of byte conversion, on each character of the input string <code>param_1</code>, which is the users&rsquo; input. Each byte is then converted as a two digit hexadecimal string and stored in <code>param_2</code> which points to <code>local_118</code> from the function call in <code>main</code>. In <code>do_fight</code>, the following can be seen:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">byte</span> <span class="nf">do_fight</span><span class="p">(</span><span class="n">byte</span> <span class="n">param_1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">byte</span> <span class="n">local_1c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">byte</span> <span class="n">local_d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">local_c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">local_d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">local_1c</span> <span class="o">=</span> <span class="n">param_1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="n">local_c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">local_c</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">local_c</span> <span class="o">=</span> <span class="n">local_c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">local_d</span> <span class="o">=</span> <span class="n">local_d</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">local_1c</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">local_1c</span> <span class="o">=</span> <span class="n">local_1c</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">local_d</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Given a byte, <code>do_fight</code> will return the reverse. So given the string value that <code>local_118</code> is compared with, we need to convert it into binary, reverse the binary and covert it to text, which will give us the flag. Doing this in CyberChef gives the following:</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/CyberChef.png"
+	width="1917"
+	height="877"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/CyberChef_hu11364035713845799481.png 480w, /p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/CyberChef_hu4693298991344084555.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="524px"
+	
+></p>
+<p>Flag: <code>KCTF{e4sy_p3asY_r3v_ch4ll3nge}</code></p>
+<h2 id="knights-droid">Knight&rsquo;s Droid
+</h2><blockquote>
+<p><strong>Description</strong>: For ages, a cryptic mechanical guardian has slumbered beneath the Knight’s Citadel. Some say it holds powerful secrets once wielded by ancient code-wielding Knights. Many have tried to reactivate the droid and claim its hidden knowledge—yet none have returned victorious. Will you be the one to solve its riddles and awaken this legendary machine?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>For this challenge, we are given an APK file called <code>knights_droid</code>. I open it using <code>jadx knights_droid.apk</code>. Inside the source code the following main function can be seen:</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Main.png"
+	width="1336"
+	height="663"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Main_hu10527696822814764513.png 480w, /p/knightctf-2025/Reverse_Engineering/Knights_Droid/Main_hu10526658102356799999.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="201"
+		data-flex-basis="483px"
+	
+></p>
+<p>The program checks to see if the user has the right flag by calling the function <code>verifyFlag</code> function from the <code>SecretKeyVerifier</code> class.</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Verifier.png"
+	width="1345"
+	height="675"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Verifier_hu2871886155045762745.png 480w, /p/knightctf-2025/Reverse_Engineering/Knights_Droid/Verifier_hu14804197626684981613.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="199"
+		data-flex-basis="478px"
+	
+></p>
+<p>Looking at the <code>SecretKeyVerifier</code> class, it can be seen that the <code>verifyFlag</code> function encodes the users&rsquo; input and then compares it with <code>GYPB{_ykjcnwp5_GJECDP_u0q_c0p_uKqN_Gj1cd7_zN01z_}</code>, which is most likely the flag. I guessed that it was probably some type of substitution cipher so I brute forced (ROT13) the string using CyberChef and got the following:</p>
+<p><img src="/p/knightctf-2025/Reverse_Engineering/Knights_Droid/CyberChef.png"
+	width="1915"
+	height="914"
+	srcset="/p/knightctf-2025/Reverse_Engineering/Knights_Droid/CyberChef_hu9497293558146672929.png 480w, /p/knightctf-2025/Reverse_Engineering/Knights_Droid/CyberChef_hu13410392906574855124.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="209"
+		data-flex-basis="502px"
+	
+></p>
+<p>Flag: <code>KCTF{_congrat5_KNIGHT_y0u_g0t_yOuR_Kn1gh7_dR01d_}</code></p>
+<h1 id="web">Web
+</h1><h2 id="knightcal">KnightCal
+</h2><blockquote>
+<p><strong>Description</strong>: In the realm of ancient codes, only those who enumerate correctly can unveil the hidden flag. Craft your mathematical expressions wisely and uncover the secrets that lie within.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>Going to the given website the following calculator page is shown:
+<img src="/p/knightctf-2025/Web/KnightCal/Initial.png"
+	width="932"
+	height="596"
+	srcset="/p/knightctf-2025/Web/KnightCal/Initial_hu15913312810725449531.png 480w, /p/knightctf-2025/Web/KnightCal/Initial_hu7800901537736927978.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="375px"
+	
+></p>
+<p>After entering <code>1234</code>, this output was given:
+<img src="/p/knightctf-2025/Web/KnightCal/Test1.png"
+	width="924"
+	height="732"
+	srcset="/p/knightctf-2025/Web/KnightCal/Test1_hu12731231341478186909.png 480w, /p/knightctf-2025/Web/KnightCal/Test1_hu2787489950332611345.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="126"
+		data-flex-basis="302px"
+	
+></p>
+<p>It was clear that the numbers corresponded to letters in some way, so I decided to try all the digits:
+<img src="/p/knightctf-2025/Web/KnightCal/Test2.png"
+	width="911"
+	height="768"
+	srcset="/p/knightctf-2025/Web/KnightCal/Test2_hu15671708509998281351.png 480w, /p/knightctf-2025/Web/KnightCal/Test2_hu2851493597150841839.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="118"
+		data-flex-basis="284px"
+	
+></p>
+<p>Given this output, I wanted to try and create the word <code>flag</code> as the website would then return <code>flag.txt</code>. Given the output from above I used <code>7195</code> as the input since:</p>
+<ul>
+<li><code>7 = f</code></li>
+<li><code>1 = l</code></li>
+<li><code>9 = a</code></li>
+<li><code>5 = g</code></li>
+</ul>
+<p><img src="/p/knightctf-2025/Web/KnightCal/Flag.png"
+	width="1011"
+	height="734"
+	srcset="/p/knightctf-2025/Web/KnightCal/Flag_hu8834776221068670465.png 480w, /p/knightctf-2025/Web/KnightCal/Flag_hu6098225488168784868.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
+	
+></p>
+<p>Flag: <code>KCTF{_c0ngR4t5_KNIGHT_f1naLLy_Y0U_g07_tH3_r1gh7_m4tH_}</code></p>
+<h1 id="cryptography">Cryptography
+</h1><h2 id="reflections-in-the-random">Reflections in the Random
+</h2><blockquote>
+<p><strong>Description</strong>: We’ve uncovered a single string that’s saturated with possibilities. At first glance, it might resemble standard Base64 output—but every attempt to decode it directly results in chaotic gibberish.</p>
+<p>Some agents suspect an unconventional passphrase or a stray cosmic phenomenon that shifted the bits; others whisper about symmetrical illusions that hide the real message. We even tried old-fashioned classical ciphers—simple shifts, sub-harmonic permutations, you name it—but the truth remains elusive.</p>
+<p>All we know is that the message is said to be “spun backward from a single pivot,” though no one agrees what that means. Could it mean time is reversed? Maybe it’s an obscure numeric transformation. Rumor has it that if you find “the key,” everything falls into place. Or maybe it’s simpler than we think—just cleverly disguised.</p>
+<p>Good luck dissecting this anomaly. Remember: “When the obvious leads nowhere, perhaps the solution sits right in front of you—only viewed from the wrong angle.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: pmsiam0</p>
+</blockquote>
+<p>We are given <code>Cipher.txt</code> which contains the following text:</p>
+<blockquote>
+<p>chipher:  PzExcRcFHQsdOxF2cR0WEXIPOQQWAQk=</p>
+<p>key = 0x42</p>
+</blockquote>
+<p>Given the challenge description, I know that during the decryption process, there must be some sort of reversal. I head to CyberChef and start trying different combinations. Since we are just given a key, I think that we need to use XOR somewhere. The key <code>0x42</code> is the letter <code>B</code>. Using this information, I decode it from Base64, reverse the output then XOR using the letter <code>B</code>. This recipe gives the following:</p>
+<p><img src="/p/knightctf-2025/Cryptography/Reflections_in_the_Random/CyberChef.png"
+	width="1910"
+	height="871"
+	srcset="/p/knightctf-2025/Cryptography/Reflections_in_the_Random/CyberChef_hu10189525112920821354.png 480w, /p/knightctf-2025/Cryptography/Reflections_in_the_Random/CyberChef_hu9967124439033703475.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="526px"
+	
+></p>
+<p>Flag: <code>KCTF{M0ST_34Sy_I_GU3ss}</code></p>
+<h2 id="forward-yet-it-falls-back">Forward, Yet It Falls Back
+</h2><blockquote>
+<p><strong>Description</strong>: We discovered a peculiar string that appears standard but yields gibberish under normal decoding. Some analysts detect suspicious symmetry, hinting at reflection or an inverted dimension. Others suspect hidden block boundaries or a “backwards encoding,” while a few insist it&rsquo;s “rotated on a different axis.”</p>
+<p>Our only clue: “Symbols may shift forward, but the key is often in reversing what we think is correct.”</p>
+<p>Good luck peeling back the layers—sometimes you must step backward to see what’s right before you.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: pmsiam0</p>
+</blockquote>
+<p>In this challenge, we are given a text file that contains the following:</p>
+<blockquote>
+<p>base32: G7G2DGQ5SY4DCK5YVUDRROJI3UOAUUNTVR6XKDOKQO4CAAKK2MJA====</p>
+<p>key = 0123456789ABCDEF</p>
+<p>iv  = FEDCBA9876543210</p>
+</blockquote>
+<p>Again, I head to CyberChef and start experimenting. I know that the first step is to decode the string use Base32. From here, I know that I probably won&rsquo;t be able to decode it using any simple cipher, given the challenge description. Given the hint <em>&ldquo;Symbols may shift forward&rdquo;</em> and the fact that we are given a <strong>key</strong> and <strong>iv</strong>, I&rsquo;m thinking it is some mode of AES.</p>
+<p>After converting the decoded Base32 string to hex and decrypting the string in CBC using the given <strong>key</strong> and <strong>iv</strong> the following is given:</p>
+<p><img src="/p/knightctf-2025/Cryptography/Forward_Yet_It_Falls_Back/CyberChef.png"
+	width="1910"
+	height="924"
+	srcset="/p/knightctf-2025/Cryptography/Forward_Yet_It_Falls_Back/CyberChef_hu12109827601160182449.png 480w, /p/knightctf-2025/Cryptography/Forward_Yet_It_Falls_Back/CyberChef_hu16087835873990024410.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="206"
+		data-flex-basis="496px"
+	
+></p>
+<p>Flag: <code>KCTF{R3vers3_R3vers3_D3C0DE}</code></p>
+<h1 id="networks">Networks
+</h1><h2 id="server--attacker-ip">Server &amp; Attacker IP
+</h2><blockquote>
+<p><strong>Description</strong>: In this challenge, I&rsquo;ve crafted a series of intricate scenarios that will test your investigative skills. You&rsquo;ll dive into a network of secrets, uncover hidden identities, and piece together the story of a complex cyber attack. Each step requires careful analysis and keen observation. There are total 17 challenges &amp; 3 pcap files in this category. The files will be provided accordingly. The answers are there, but they won&rsquo;t come easily—you&rsquo;ll need to think like an attacker and act like a detective. Get ready to unravel the mystery and prove your prowess in this thrilling journey.</p>
+<p>What are the server &amp; attacker IPs?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: TareqAhamed (0xt4req)</p>
+</blockquote>
+<p>For this challenge and all following network challenges, we&rsquo;re given a <code>capture1.pcapng</code> file. In this first challenge, we have to find the server and attacker IPs. Quickly scrolling over the file, I can see that there are a lot of <code>[SYN]</code> TCP packets being sent from <code>192.168.1.9</code> to <code>192.167.1.10</code>. <code>192.167.1.10</code> is then replying with <code>[RST, ACK]</code>.</p>
+<p><img src="/p/knightctf-2025/Networking/Server_&amp;_Attacker_IP/WireShark.png"
+	width="1917"
+	height="1032"
+	srcset="/p/knightctf-2025/Networking/Server_&amp;_Attacker_IP/WireShark_hu16333368098523258420.png 480w, /p/knightctf-2025/Networking/Server_&amp;_Attacker_IP/WireShark_hu2230862111140308416.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="445px"
+	
+></p>
+<p>Since this exchange goes on for quite I while, I&rsquo;m thinking that the attacker is <code>192.168.1.9</code> and they are running some sort of port scan on the server at <code>192.167.1.10</code>.</p>
+<p>Flag: <code>192.168.1.10_192.168.1.9</code></p>
+<h2 id="the-intruders-identity">The Intruder&rsquo;s Identity
+</h2><blockquote>
+<p><strong>Description</strong>: The attacker has gained access. Can you find out the username and password he used?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: TareqAhamed (0xt4req)</p>
+</blockquote>
+<p>Looking at the packets, it&rsquo;s clear that <code>192.167.1.10</code> is a web server. I filter the packets using <code>ip.src == 192.168.1.9 &amp;&amp; http.request.method == POST &amp;&amp; ip.dst == 192.168.1.10</code> and the first packet that comes up is to <code>/register</code>. Looking at this packet the following details are found:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HTML Form URL Encoded: application/x-www-form-urlencoded
+</span></span><span class="line"><span class="cl">    Form item: &#34;_token&#34; = &#34;pLDuHThQ1RGo8gXsm7ZHtxYLr66KDMWMXJEt8GEa&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;name&#34; = &#34;TheExploiter&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;username&#34; = &#34;theexploiter&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;email&#34; = &#34;theexploiter@knightblog.com&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;password&#34; = &#34;exploiter@test&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;password_confirmation&#34; = &#34;exploiter@test&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Flag: <code>KCTF{theexploiter_exploiter@test}</code></p>
+<h2 id="the-real-admin">The Real Admin
+</h2><blockquote>
+<p><strong>Description</strong>: Can you identify the real admin&rsquo;s ip?</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: TareqAhamed (0xt4req)</p>
+</blockquote>
+<p>Filtering the packets using <code>http.request.method == POST &amp;&amp; ip.addr == 192.168.1.10</code> doesn&rsquo;t help because the attacker has used some sort of web enumeration tool to try and brute force the admins&rsquo; password.</p>
+<p><img src="/p/knightctf-2025/Networking/The_Real_Admin/BF.png"
+	width="1917"
+	height="1029"
+	srcset="/p/knightctf-2025/Networking/The_Real_Admin/BF_hu2390196821513228108.png 480w, /p/knightctf-2025/Networking/The_Real_Admin/BF_hu857980077066939431.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="447px"
+	
+></p>
+<p>So the attackers&rsquo; IP address needs to be filtered out.</p>
+<p><code>http.request.method == POST &amp;&amp; ip.addr == 192.168.1.10 &amp;&amp; !ip.addr == 192.168.1.9</code> shows one packet with the details:</p>
+<p><code>171000	623.001452577	192.168.1.3	192.168.1.10	HTTP	128	POST /admin/blog/delete/3 HTTP/1.1  (application/x-www-form-urlencoded)</code></p>
+<p>Flag: <code>KCTF{192.168.1.3}</code></p>
+<h2 id="compromising-the-admin">Compromising the Admin
+</h2><blockquote>
+<p><strong>Description</strong>: The attacker managed to compromise the admin&rsquo;s credentials. Identify the admin&rsquo;s email and password.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: TareqAhamed (0xt4req)</p>
+</blockquote>
+<p>Since we know that the attacker is trying to brute force the <code>/admin/login</code> page with POST requests, I decide to filter the packets using this information:</p>
+<p><code>http.request.method == POST &amp;&amp; ip.addr == 192.168.1.10 &amp;&amp; ip.addr == 192.168.1.9 &amp;&amp; http.request.uri == &quot;/admin/login&quot;</code></p>
+<p>I decide to use the information from the last packet since this would mean that either the attacker&rsquo;s brute force ended unsuccessfully or they were able to get the right credentials.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HTML Form URL Encoded: application/x-www-form-urlencoded
+</span></span><span class="line"><span class="cl">    Form item: &#34;_token&#34; = &#34;lj41L7Wk6N6hZd7K5twHMghHSkruvwzX3JcV5GLj&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;email&#34; = &#34;admin@example.com&#34;
+</span></span><span class="line"><span class="cl">    Form item: &#34;password&#34; = &#34;password&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Flag: <code>KCTF{admin@example.com_password}</code></p>
+<h1 id="pwn">PWN
+</h1><h2 id="knights-bank">Knight&rsquo;s Bank
+</h2><blockquote>
+<p><strong>Description</strong>: In the heart of the ancient kingdom lies the Knight Bank, a fortress of wealth guarded by its intricate magical arithmetic. Only the most cunning warriors who understand the secret vulnerabilities of numbers can uncover the hidden treasure buried deep within its vaults.</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>For this challenge, we are given given an IP address and port to establish a netcat connection with (which I forgot to note down). We are also given a <code>knight_bank</code> file, which is being run when we establish the netcat connection. Running the file gives:</p>
+<p><img src="/p/knightctf-2025/PWN/Knight_Bank/Output.png"
+	width="1116"
+	height="537"
+	srcset="/p/knightctf-2025/PWN/Knight_Bank/Output_hu17804216234660933999.png 480w, /p/knightctf-2025/PWN/Knight_Bank/Output_hu8491042180108433143.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="207"
+		data-flex-basis="498px"
+	
+></p>
+<p>Opening the file in Ghidra, there are two interesting functions <code>main</code> and <code>win_prize</code>. <code>main</code> has the following logic:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">undefined8</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">undefined8</span> <span class="n">uVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">uint</span> <span class="n">local_10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">uint</span> <span class="n">local_c</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="n">local_c</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Welcome to the Knight Bank!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Your current balance is: %u</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="n">ulong</span><span class="p">)</span><span class="n">local_c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Enter the amount you want to withdraw: &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">iVar1</span> <span class="o">=</span> <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_004020a0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">local_10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">&lt;</span> <span class="mh">0xf4241</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">local_c</span> <span class="o">=</span> <span class="n">local_c</span> <span class="o">-</span> <span class="n">local_10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;You withdrew %u. Your new balance is %u.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,(</span><span class="n">ulong</span><span class="p">)</span><span class="n">local_10</span><span class="p">,(</span><span class="n">ulong</span><span class="p">)</span><span class="n">local_c</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">local_c</span> <span class="o">&lt;</span> <span class="mh">0xf4241</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Better luck next time!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">win_prize</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Error: You cannot withdraw more than 1,000,000 at a time.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Invalid input. Exiting.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">uVar2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">uVar2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>win_prize</code> function:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">win_prize</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Congratulations! You win the prize!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">system</span><span class="p">(</span><span class="s">&#34;cat flag.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Given this information, we need to trigger the <code>else</code> statement that calls <code>win_prize</code>. After subtracting the users&rsquo; input (which has to be less than 1,000,000 given the hex value <code>0xf4241</code>) from the balance, the program checks if the result is less than 1,000,000. If it isn&rsquo;t then we get the flag.</p>
+<p>I decided in input 10,000 since it was larger than 1000 and less than 1,000,000. Since <code>local_c</code> is a 32-bit unsigned integer, this would cause the subtraction to wrap around when it goes below 0. This gave the flag, however I forgot to note the flag down, so here is the output on my local machine:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Welcome to the Knight Bank!
+</span></span><span class="line"><span class="cl">Your current balance is: 1000
+</span></span><span class="line"><span class="cl">Enter the amount you want to withdraw: 10000
+</span></span><span class="line"><span class="cl">You withdrew 10000. Your new balance is 4294958296.
+</span></span><span class="line"><span class="cl">Congratulations! You win the prize!
+</span></span><span class="line"><span class="cl">cat: flag.txt: No such file or directory
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="knights-secret">Knight&rsquo;s Secret
+</h2><blockquote>
+<p><strong>Description</strong>: Exploit &amp; get the flag.</p>
+<p>Connection Info: nc 45.56.68.122 1337</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>We aren&rsquo;t given any files for this challenge. Connecting to the server we can see this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">└─$ nc 45.56.68.122 1337
+</span></span><span class="line"><span class="cl">==================================================
+</span></span><span class="line"><span class="cl">Welcome to the Knight&#39;s Secret!
+</span></span><span class="line"><span class="cl">The castle&#39;s vault holds a secret key, protected within the CONFIG dictionary.
+</span></span><span class="line"><span class="cl">You are a knight tasked with proving the strength of the vault&#39;s defenses.
+</span></span><span class="line"><span class="cl">To succeed, you must craft an input to reveal the hidden key within the system.
+</span></span><span class="line"><span class="cl">You will be provided with a user object representing a knight, with attributes &#39;name&#39; and &#39;role&#39;.
+</span></span><span class="line"><span class="cl">Once you discover the key, input it again to receive the banner of victory.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Example of a safe template: &#39;Greetings, {person_obj.name}, the {person_obj.role}.&#39;
+</span></span><span class="line"><span class="cl">Type &#39;hint&#39; if you need guidance or &#39;exit&#39; to withdraw from the quest.
+</span></span><span class="line"><span class="cl">==================================================
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Enter your secret: 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Entering the safe template given shows:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Enter your secret: Greetings, {person_obj.name}, the {person_obj.role}
+</span></span><span class="line"><span class="cl">Output: Greetings, Brave Knight, the Defender of the Realm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>After much trail and error I was able to figure out that the program running on the server would only taken in objects as input. So using this, we need to get the <code>CONFIG</code> library. Using <code>{person_obj.__class__.__init__.__globals__}</code> we can see the following:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">Enter</span> <span class="n">your</span> <span class="n">secret</span><span class="p">:</span> <span class="p">{</span><span class="n">person_obj</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__init__</span><span class="o">.</span><span class="n">__globals__</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Output</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;__name__&#39;</span><span class="p">:</span> <span class="s1">&#39;__main__&#39;</span><span class="p">,</span> <span class="s1">&#39;__doc__&#39;</span><span class="p">:</span> <span class="n">None</span><span class="p">,</span> <span class="s1">&#39;__package__&#39;</span><span class="p">:</span> <span class="n">None</span><span class="p">,</span> <span class="s1">&#39;__loader__&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">_frozen_importlib_external</span><span class="o">.</span><span class="n">SourceFileLoader</span> <span class="n">object</span> <span class="n">at</span> <span class="mh">0x72e3aa43b920</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;__spec__&#39;</span><span class="p">:</span> <span class="n">None</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">:</span> <span class="p">{},</span> <span class="s1">&#39;__builtins__&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">module</span> <span class="s1">&#39;builtins&#39;</span> <span class="p">(</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">:</span> <span class="s1">&#39;/challenge/challenge.py&#39;</span><span class="p">,</span> <span class="s1">&#39;__cached__&#39;</span><span class="p">:</span> <span class="n">None</span><span class="p">,</span> <span class="s1">&#39;CONFIG&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;KEY&#39;</span><span class="p">:</span> <span class="s1">&#39;_KNIGHTSECRET2025_&#39;</span><span class="p">},</span> <span class="s1">&#39;Person&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="k">class</span> <span class="s1">&#39;__main__.Person&#39;</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;fun&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">fun</span> <span class="n">at</span> <span class="mh">0x72e3aa422340</span><span class="o">&gt;</span><span class="p">,</span> <span class="s1">&#39;main&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">main</span> <span class="n">at</span> <span class="mh">0x72e3aa200d60</span><span class="o">&gt;</span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The key <code>_KNIGHTSECRET2025_</code> has the flag. Entering <code>{person_obj.__class__.__init__.__globals__[CONFIG][KEY]}</code> gives:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Enter your secret: {person_obj.__class__.__init__.__globals__[CONFIG]} 
+</span></span><span class="line"><span class="cl">Output: {&#39;KEY&#39;: &#39;_KNIGHTSECRET2025_&#39;} 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Enter your secret: {person_obj.__class__.__init__.__globals__[CONFIG][KEY]}
+</span></span><span class="line"><span class="cl">Congratulations, noble knight! You have unveiled the vault&#39;s secret.
+</span></span><span class="line"><span class="cl">Here is your banner of victory: KCTF{_c0ngRaT5_Kn1GHT_Y0U_g07_THE_secreT_}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Flag: <code>KCTF{_c0ngRaT5_Kn1GHT_Y0U_g07_THE_secreT_}</code></p>
+<h1 id="osint">OSINT
+</h1><h2 id="the-hidden-quest">The Hidden Quest
+</h2><blockquote>
+<p><strong>Description</strong>: The journey begins even before the battle starts! 🕵️‍♂️</p>
+<p>In the world of knights and hackers, not everything is as it seems. Somewhere in our recent posts, a secret lies hidden, waiting to be discovered. 🕵️‍♂️</p>
+<p>Look closer, think sharper, and let your curiosity guide you. The answer is out there – will you find it? 🛡️</p>
+</blockquote>
+<blockquote>
+<p><strong>Author</strong>: NomanProdhan</p>
+</blockquote>
+<p>Given the challenge description, I decide to find all the different social media accounts of Knight Squad. Going to their <a class="link" href="https://knightctf.com/"  target="_blank" rel="noopener"
+    >website</a>, we can see at the bottom of their page that they have a Facebook, Twitter and Youtube account. I decide to start with their Facebook account. They have made several posts this year so I decide to go through them all. On one of the posts I see that one of the hashtags is #Flag. I double check this by looking at the tags for the other posts and this post is the only one that has it. After looking at the image, I saw the flag in the top left. The post is <a class="link" href="https://www.facebook.com/photo/?fbid=603615618984074&amp;set=ecnf.100080069238184"  target="_blank" rel="noopener"
+    >here</a>.</p>
+<p><img src="/p/knightctf-2025/OSINT/FB.jpg"
+	width="1792"
+	height="1024"
+	srcset="/p/knightctf-2025/OSINT/FB_hu18290949660904876642.jpg 480w, /p/knightctf-2025/OSINT/FB_hu17687126467991478894.jpg 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="420px"
+	
+></p>
+<p>Flag: <code>KCTF{w0W_y0U_G07_m3_}</code></p>
+<h1 id="thank-you">Thank You
+</h1><p>If you&rsquo;ve made it this far, I hope you&rsquo;ve enjoyed this writeup and thank you for reading it! Thanks again to the Knight Squad for organising this CTF.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+        <section class = "article-tags">
+            <div class = "article-tag-details">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <path d="M11 3L20 12a1.5 1.5 0 0 1 0 2L14 20a1.5 1.5 0 0 1 -2 0L3 11v-4a4 4 0 0 1 4 -4h4" />
+                    <circle cx="9" cy="9" r="2" />
+                </svg>
+                <div class = "article-tags">
+                    
+    <section class="article-tags">
+        
+            <a href="/tags/ctf-jeopardy/">CTF Jeopardy</a>
+        
+            <a href="/tags/web/">Web</a>
+        
+            <a href="/tags/networks/">Networks</a>
+        
+            <a href="/tags/reverse-engineering/">Reverse Engineering</a>
+        
+            <a href="/tags/pwn/">Pwn</a>
+        
+            <a href="/tags/osint/">OSINT</a>
+        
+            <a href="/tags/cryptography/">Cryptography</a>
+        
+    </section>
+
+                </div>
+            </div>
+        </section>
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z"/>
+            <circle cx="12" cy="12" r="9" />
+            <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+        </svg>
+          
+        <span><a href = "https://creativecommons.org/licenses/by/4.0/">This post is licensed under CC BY 4.0</a></span>
+    </section>
+    
+</footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/ectf-2025/">
+        
+        
+            <div class="article-image">
+                <img src="/p/ectf-2025/cover.ec88e4c0afd81538070e28fba6b03cae_hu5634850771547988297.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post ECTF 2025 Writeup"
+                        data-key="ECTF-2025" 
+                        data-hash="md5-7IjkwK/YFTgHDij7prA8rg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ECTF 2025 Writeup</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2025 MT12. Some rights reserved.
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.e325941d7b205fb50e25a3de4ae429974741be23020c813dace578d935e0007a.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

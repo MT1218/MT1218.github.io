@@ -1,0 +1,30 @@
+a {
+    text-decoration: none;
+    color: var(--accent-color);
+    transition-duration: 0.5s;
+
+    &:hover {
+        color: var(--aqua-light-colour);
+    }
+
+    &.link {
+        color: #55bbff;
+        text-decoration: underline;
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: var(--aqua-light-colour-link);
+        }
+    }
+}
+
+.article-content code {
+    color: var(--aqua-light-colour-two);
+}
+
+.section-title {
+    margin-top: 0.67em;
+    color: var(--accent-color);
+    font-size: 2em;
+    text-transform: none;
+}

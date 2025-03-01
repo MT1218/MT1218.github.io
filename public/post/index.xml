@@ -1,0 +1,1674 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on MT12</title>
+        <link>http://localhost:1313/post/</link>
+        <description>Recent content in Posts on MT12</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>MT12. Some rights reserved.</copyright>
+        <lastBuildDate>Tue, 04 Feb 2025 10:00:00 +1100</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ECTF 2025 Writeup</title>
+        <link>http://localhost:1313/p/ectf-2025/</link>
+        <pubDate>Tue, 04 Feb 2025 10:00:00 +1100</pubDate>
+        
+        <guid>http://localhost:1313/p/ectf-2025/</guid>
+        <description>&lt;img src="http://localhost:1313/p/ectf-2025/cover.png" alt="Featured image of post ECTF 2025 Writeup" /&gt;&lt;p&gt;Over the weekend, I solo participated in the 48-hour ECTF. I ranked 53rd out of 383 teams. Massive thanks to the &lt;a class=&#34;link&#34; href=&#34;https://ctftime.org/team/299061&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Cyber &amp;amp; Chill&lt;/a&gt; team for hosting this CTF.&lt;/p&gt;
+&lt;h1 id=&#34;cryptography&#34;&gt;Cryptography
+&lt;/h1&gt;&lt;h2 id=&#34;ascii-me-anything-but-the-flag&#34;&gt;ASCII me anything but the flag
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: There is an encrypted flag, good luck with that I encrypted it well!&lt;/p&gt;
+&lt;p&gt;108 100 111 109 123 85 99 49 122 95 106 53 95 79 111 51 95 88 52 116 95 48 109 95 51 111 88 121 90 107 97 106 48 105 125 10 10 69 98 111 98 32 102 112 32 118 108 114 111 32 104 98 118 44 32 100 108 108 97 32 105 114 122 104 32 58 32 72 66 86 72 66 86 10 10 87 101 108 108 32 100 111 110 101 44 32 98 117 116 32 110 111 119 32 100 111 32 121 111 117 32 107 110 111 119 32 97 98 111 117 116 32 116 104 101 32 103 117 121 32 119 104 111 32 103 111 116 32 115 116 97 98 98 101 100 32 50 51 32 116 105 109 101 115 32 63&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Antoine&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Looking at the range of numbers, my first guess was to convert them to ASCII.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/ASCII_Convert.png&#34;
+	width=&#34;867&#34;
+	height=&#34;754&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/ASCII_Convert_hu6419592164574085233.png 480w, http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/ASCII_Convert_hu5287047074670757022.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;114&#34;
+		data-flex-basis=&#34;275px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I guessed correct. From the conversion, the first two lines are still encrypted somehow but the last line hints towards what the next step is. Julius Caesar was stabbed 23 times so the next step must be to use the Caesar cipher.&lt;/p&gt;
+&lt;p&gt;Putting the second line (&lt;code&gt;Ebob fp vlro hbv, dlla irzh : HBVHBV&lt;/code&gt;) into Cyberchef with a variation of the Caesar Cipher (ROT47) to decipher the text gives the result:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Caeser.png&#34;
+	width=&#34;1912&#34;
+	height=&#34;910&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Caeser_hu8565717453848421952.png 480w, http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Caeser_hu2065326530423394296.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;504px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Now we have a key: &lt;code&gt;KEYKEY&lt;/code&gt;. Using Cyberchef again, and the first line from the ASCII conversion (&lt;code&gt;ldom{Uc1z_j5_Oo3_X4t_0m_3oXyZkaj0i}&lt;/code&gt;) we can use Vigenère decipher to get the flag:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Flag.png&#34;
+	width=&#34;1914&#34;
+	height=&#34;910&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Flag_hu109478489776034267.png 480w, http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-ASCII-me-anything-but-not-the-flag/Flag_hu14260509171965222501.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;504px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{Th1s_i5_Th3_W4y_0f_3nCrYpti0n}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;cracking-the-vault&#34;&gt;Cracking the Vault
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: The vault is locked with a key, but we&amp;rsquo;ve managed to access a security computer. Unfortunately, the key is encrypted, and the owner forgot to remove the file that encrypts it. It appears to be some sort of homemade encryption, but don’t worry this should be a piece of cake for you, right?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Antoine&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, there are two files. A python file which has an encryption function and a text file which is most likely the output of the python file.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Encryption.py&lt;/strong&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-Python&#34; data-lang=&#34;Python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;secrets&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;hashlib&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;encryption&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;encrypted&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;random&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;secrets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SystemRandom&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;padding_length&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;256&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;256&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;raw_padding&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;chr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;random&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;randint&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;126&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;range&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;padding_length&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;scrambled_padding&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;chr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;ord&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;94&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;raw_padding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;shifted_padding&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;scrambled_padding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[::&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;padded_text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shifted_padding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;text&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;final_padded_text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nb&#34;&gt;chr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;ord&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;^&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;42&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;94&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;enumerate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;padded_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;secret_key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;sum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;ord&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;secret_key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;secret_key&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[::&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;hashed_key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;hashlib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sha256&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;secret_key&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hexdigest&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hashed_key&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;random&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;secrets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SystemRandom&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;enumerate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;char_code&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;ord&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;char&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;shift&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;transformed&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;char_code&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;shift&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;67&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;256&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;encrypted&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;chr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transformed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encrypted&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;VaultKey.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;seed&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;encryption&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;VaultKey_encrypted.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;w&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;The file has been successfully encrypted!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;From the code it&amp;rsquo;s clear that the encryption function must be reversed and run on the text file to get the flag. At first I was a bit confused on how to approach this but going through the code I saw that there are a lot of red herrings. The main encryption that is happening to the original flag text is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Convert each character to its ASCII value.&lt;/li&gt;
+&lt;li&gt;Calculate a shift value based on the character&amp;rsquo;s position.&lt;/li&gt;
+&lt;li&gt;Add the shift value and 67 to the ASCII value the mod it by 256.&lt;/li&gt;
+&lt;li&gt;Add this ASCII value to the final encrypted text.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Using this information, the decryption function can be created:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-Python&#34; data-lang=&#34;Python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;decryption&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;decrypted&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;enumerate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;char_code&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;ord&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;char&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;shift&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;transformed&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;char_code&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;67&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;shift&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;%&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;256&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;decrypted&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;chr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transformed&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;decrypted&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;filepath_to_VaultKey_encrypted.txt&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;encoding&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;utf-8&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;decrypted_text&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;decryption&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;encrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;decrypted_text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Running this python function on the provided encrypted file gives:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-Crypto_3_-_Cracking_the_Vault/Output.png&#34;
+	width=&#34;676&#34;
+	height=&#34;59&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-Crypto_3_-_Cracking_the_Vault/Output_hu10978000450574556311.png 480w, http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-Crypto_3_-_Cracking_the_Vault/Output_hu2227583558820617836.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1145&#34;
+		data-flex-basis=&#34;2749px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{1t_W45_ju5T_4_m1nu5}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;rsa-intro&#34;&gt;RSA Intro
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: This is just a brief introduction to RSA nothing more nothing less.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Antoine&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This challenge was pretty straightforward. We are given a text file that has &lt;strong&gt;n&lt;/strong&gt;, &lt;strong&gt;e&lt;/strong&gt; and &lt;strong&gt;c&lt;/strong&gt;. So the RSA encryption can be easily reversed by putting the given values into a RSA deciphering tool:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-Crypto_4_-_output/Decipher.png&#34;
+	width=&#34;1670&#34;
+	height=&#34;708&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-Crypto_4_-_output/Decipher_hu11622781922496041834.png 480w, http://localhost:1313/p/ectf-2025/Cryptography/SOLVED-Crypto_4_-_output/Decipher_hu3495774658166996130.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;235&#34;
+		data-flex-basis=&#34;566px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{b4sic_F4cT0rDb_rS4}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;oiiaioiiai-&#34;&gt;OIIAIOIIAI 😼
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: The cat made a mess of the flag , I have to retrieve the flag or my boss will be mad.&lt;/p&gt;
+&lt;p&gt;}eYcbt4fB{&lt;em&gt;yD0nUu_05Rp_1TNh_GM13R&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Antoine&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Given the challenge name, the text has been encrypted by some sort of &amp;lsquo;spinning&amp;rsquo; or &amp;rsquo;turning&amp;rsquo;. After some trial and error with different combinations of decrpytion on Cyberchef, I noticed something interesting. Starting from the second character in the encrypted text, skipping every other letter gives &amp;rsquo;ectf&amp;rsquo;. The first half of the flag is every even character and the second half is every odd character. I reversed this in python:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-Python&#34; data-lang=&#34;Python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;}eYcbt4fB{_yD0nUu_05Rp_1TNh_GM13R_&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;range&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;range&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;reverseString&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;reverseString&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reverseString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[::&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reverseString&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;result&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Flag: &lt;code&gt;ectf{y0U_5p1N_M3_R1GhT_R0unD_B4bY}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;forensics&#34;&gt;Forensics
+&lt;/h1&gt;&lt;h2 id=&#34;justapcap&#34;&gt;Justapcap
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: An image has been stolen, can you find it in the PCAP file?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Greg&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, we are given a pcap file. At first glance, opening this in Wireshark, I can see that the file is just a whole lot of DNS messages sent from the same source and sent to the same destination.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/Wireshark.png&#34;
+	width=&#34;1919&#34;
+	height=&#34;1034&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/Wireshark_hu121989047808131629.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/Wireshark_hu12780556255949721009.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;185&#34;
+		data-flex-basis=&#34;445px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;After inspecting the first few lines of the pcap file, I noticed that the body of the first DNS request matched the hex file signature of a PNG file (&lt;code&gt;89 50 4E 47 0D 0A 1A 0A&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/pngSignature.png&#34;
+	width=&#34;975&#34;
+	height=&#34;691&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/pngSignature_hu12860790535426332473.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/pngSignature_hu11837888545058662783.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;141&#34;
+		data-flex-basis=&#34;338px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;To get the actual image, I needed to extract all the lines without the words &amp;ldquo;exfil&amp;rdquo; or &amp;ldquo;attacker&amp;rdquo; in them. After doing this, I noticed that the number &amp;ldquo;2&amp;rdquo; was at the start of every row so I used the &lt;code&gt;cut&lt;/code&gt; command to get rid of this.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/extractHex.png&#34;
+	width=&#34;643&#34;
+	height=&#34;380&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/extractHex_hu8523124241165551996.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/extractHex_hu17861347713872169747.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;169&#34;
+		data-flex-basis=&#34;406px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;However the file still wasn&amp;rsquo;t being recognised as a proper PNG file and I started feeling like I hit a wall. After much investigation, I decided to have a look at it manually in notepad and noticed that there were many junk lines that needed to be removed.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/junkLines.png&#34;
+	width=&#34;837&#34;
+	height=&#34;993&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/junkLines_hu17975942721132300591.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/junkLines_hu13459135386005729296.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;84&#34;
+		data-flex-basis=&#34;202px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;After manually removing these lines, I reversed the hex dump using:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/reverseHexDump.png&#34;
+	width=&#34;643&#34;
+	height=&#34;53&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/reverseHexDump_hu12889306775673698201.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/reverseHexDump_hu17530274923419943250.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1213&#34;
+		data-flex-basis=&#34;2911px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Opening binImage.png gave:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/binImage.png&#34;
+	width=&#34;1152&#34;
+	height=&#34;648&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/binImage_hu13109875505672559368.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_4_-_justapcap/binImage_hu231855398621294039.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{DN5_3xf1ltr@t10n_15_f1nd3d}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;my-dearest&#34;&gt;My Dearest
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: I have Received a love letter by a fake email. Can you help me to find who is the author?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Greg&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This one was pretty straightforward. We are given a word document and need to submit the author&amp;rsquo;s name as the flag. I did this through exiftool.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_5_-_My_dearest/exiftool.png&#34;
+	width=&#34;1110&#34;
+	height=&#34;811&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_5_-_My_dearest/exiftool_hu8511523982140235717.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic_5_-_My_dearest/exiftool_hu6327347416158666547.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;136&#34;
+		data-flex-basis=&#34;328px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{MichelTeller}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;capture-the-hidden&#34;&gt;Capture the Hidden
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: A cybersecurity agent intercepted suspicious network traffic before disappearing. The attackers attempted to erase their tracks, but a PCAP file was recovered.&lt;/p&gt;
+&lt;p&gt;Somewhere within these packets, a crucial file was exfiltrated. Can you analyze the traffic, extract the hidden data, and uncover the secret message?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Greg&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This challenge wasn&amp;rsquo;t too bad either. Looking at the pcap file, 3 TCP messages instantly stand out. Right before the first TCP message is sent, a FTP request is sent with the username as &amp;ldquo;hacker&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/wireshark.png&#34;
+	width=&#34;1909&#34;
+	height=&#34;882&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/wireshark_hu9900164058085611626.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/wireshark_hu4608033422110964727.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;216&#34;
+		data-flex-basis=&#34;519px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;A couple of lines before this FTP message, a POST request is sent to the same destination. Looking at the body of this POST request, there seems to be some sort of encrypted data, my first guess being base64.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/decrypt.png&#34;
+	width=&#34;1916&#34;
+	height=&#34;914&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/decrypt_hu13484816319353295993.png 480w, http://localhost:1313/p/ectf-2025/Forensics/SOLVED-Forensic-6-forensic-capture-the-hidden/decrypt_hu1026931665789652751.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;503px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{P05t_1s_v3ry_345y_T0_F1ND}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;hardware&#34;&gt;Hardware
+&lt;/h1&gt;&lt;h2 id=&#34;orbit&#34;&gt;ORbit
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: You are given a logic circuit (see orbit.png) and asked to give the binary output corresponding to the input such that (x0, x1, x2, x3, x4) = (0, 1, 0, 1, 0). Surround your answer with ectf{ } to obtain the flag.&lt;/p&gt;
+&lt;p&gt;As an example, entering (x0, x1, x2, x3, x4) = (1, 0, 0, 0, 0) gives (y0, y1, y2, y3, y4, y5, y6), so the flag would be ectf{1111010}.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Loïc&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This challenge was really fun and different to the challenges I&amp;rsquo;ve done before. We are given a logic diagram and an input and need to find the output.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/logicDiagram.png&#34;
+	width=&#34;1029&#34;
+	height=&#34;1452&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/logicDiagram_hu4499966904511491793.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/logicDiagram_hu5947565473487133693.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;70&#34;
+		data-flex-basis=&#34;170px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I thought about doing this using some sort of simulator website but ended up doing the calculations by hand. I first labelled all the AND gates (can be seen in the image) to make it easier when doing the calculations.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/calculations.jpg&#34;
+	width=&#34;3238&#34;
+	height=&#34;2322&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/calculations_hu11278588534704958374.jpg 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_1_-_ORbit/calculations_hu7504416397493142650.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;139&#34;
+		data-flex-basis=&#34;334px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Doing this by hand was probably not the best way, since it&amp;rsquo;s pretty easy to mess up as I did on the left page and had to recalculate the values of y. In the end I was able to get the right values of y and as a result the right flag.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{0101011}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;it-is-trivial&#34;&gt;It is Trivial
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: I forgot to write down the description for this challenge but it was just the previous challenge but way more complex. The input is 30478191278.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Loïc&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Same scenario again, but this time it&amp;rsquo;s much harder.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/logicDiagram.png&#34;
+	width=&#34;1225&#34;
+	height=&#34;2176&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/logicDiagram_hu17729088589059014366.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/logicDiagram_hu13694640377496549513.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;56&#34;
+		data-flex-basis=&#34;135px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This time I decided to use &lt;a class=&#34;link&#34; href=&#34;https://logic.ly/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;logic.ly&lt;/a&gt;. Since it was even more easy to mess up for this challenge, I labelled all the gates according to their column. This way I would be able to cross check the gates by labelling them in logic.ly.&lt;/p&gt;
+&lt;p&gt;Looking at the diagram, I was a bit confused on how the number that was given would become the input. On the diagram, I noticed that 6 digit binary numbers were being used to produce the output in each &amp;ldquo;block&amp;rdquo;. There would be a carry over bit for the next block, which linked the whole circuit diagram. I then converted the given number into binary but the number of digits wasn&amp;rsquo;t a multiple of 6 (it was 35). This was solved by adding an extra 0 at the start of the converted binary number: &lt;code&gt;011100011000101001000100101010101110&lt;/code&gt;. I could split this up into blocks of 6 bits and input them into logic.ly.&lt;/p&gt;
+&lt;p&gt;Now came the tedious part, recreating the diagram. After a lot of time clicking away and rechecking I was able to replicate the logic circuit from the diagram.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/1.png&#34;
+	width=&#34;1199&#34;
+	height=&#34;451&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/1_hu8172264240040549408.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/1_hu14099382421260358254.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;265&#34;
+		data-flex-basis=&#34;638px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/2.png&#34;
+	width=&#34;1182&#34;
+	height=&#34;379&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/2_hu5385682262719593372.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/2_hu7273580485428458890.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;311&#34;
+		data-flex-basis=&#34;748px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/3.png&#34;
+	width=&#34;1150&#34;
+	height=&#34;398&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/3_hu18076878112320917518.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/3_hu5504626015959669027.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;288&#34;
+		data-flex-basis=&#34;693px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/4.png&#34;
+	width=&#34;1117&#34;
+	height=&#34;308&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/4_hu4758077888304142136.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/4_hu3210500256554815253.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;362&#34;
+		data-flex-basis=&#34;870px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/5.png&#34;
+	width=&#34;1159&#34;
+	height=&#34;333&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/5_hu240815065272317457.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/5_hu13294118613344698908.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;348&#34;
+		data-flex-basis=&#34;835px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/6.png&#34;
+	width=&#34;1113&#34;
+	height=&#34;322&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/6_hu15340411872469989243.png 480w, http://localhost:1313/p/ectf-2025/Hardware/SOLVED-Hardware_2_-_it_is_trivial/LogiclyImages/6_hu1629941389854373770.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;345&#34;
+		data-flex-basis=&#34;829px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I used switches to set the input (off is 0 and on is 1) and lights for the output. I somehow got lucky and had the correct output on the first go!&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{100010011000}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;osint&#34;&gt;OSINT
+&lt;/h1&gt;&lt;h2 id=&#34;project-153-q1&#34;&gt;Project-153-Q1
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Thomas Yatangaki : Have you ever visited this place ? I can&amp;rsquo;t remember the name&amp;hellip;
+Maboi 💪 : Me neither 😕&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-1/challenge.jpg&#34;
+	width=&#34;3968&#34;
+	height=&#34;2976&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-1/challenge_hu15063631147757945683.jpg 480w, http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-1/challenge_hu3202676783738190097.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;133&#34;
+		data-flex-basis=&#34;320px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This first OSINT challenge was easy. Google searching the image returned the location of the place.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{Chutes_du_Caramy}&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Egan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;project-153-q2&#34;&gt;Project-153-Q2
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Thomas Yatangaki : Did you know that the exact position where I took the photo had a name ? It is such an interesting place full of history 😮.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Egan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-2/challenge.jpg&#34;
+	width=&#34;4208&#34;
+	height=&#34;3120&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-2/challenge_hu16917564730710701637.jpg 480w, http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-2/challenge_hu858188917367675854.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;134&#34;
+		data-flex-basis=&#34;323px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This challenge took some time since it wasn&amp;rsquo;t straightforward. Reverse searching the image, we get a mountain range in France known as &lt;code&gt;Massif de l&#39;Esterel&lt;/code&gt;. However this wasn&amp;rsquo;t the right flag.&lt;/p&gt;
+&lt;p&gt;Going through the search results, there are a lot of matches but none that give any hint as to what the flag could be. Maybe if I found the exact place of the photo, there might be a hint.&lt;/p&gt;
+&lt;p&gt;I found this flicker &lt;a class=&#34;link&#34; href=&#34;https://www.flickr.com/photos/jmenj/23878898442&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;post&lt;/a&gt;, which was geo-tagged. Going to this exact &lt;a class=&#34;link&#34; href=&#34;https://www.google.com/maps/search/Antheor-Cap-Roux,&amp;#43;c%C3%B4te&amp;#43;rocheuse/@43.4475326,6.9050344,15z/data=!3m1!4b1?hl=en-US&amp;amp;entry=ttu&amp;amp;g_ep=EgoyMDI1MDIyNi4xIKXMDSoASAFQAw%3D%3D&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;place&lt;/a&gt; in Google Maps and going into street view at this &lt;a class=&#34;link&#34; href=&#34;https://www.google.com/maps/@43.4487237,6.9182804,3a,75y,194.95h,88.45t/data=!3m8!1e1!3m6!1sAF1QipPxgLu2VmPUZFcJlTkKdQANUfD0JakceY-8b49j!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fp%2FAF1QipPxgLu2VmPUZFcJlTkKdQANUfD0JakceY-8b49j%3Dw900-h600-k-no-pi1.5456572426063104-ya337.94733492539604-ro0-fo100!7i10240!8i5120?hl=en-US&amp;amp;entry=ttu&amp;amp;g_ep=EgoyMDI1MDIyNi4xIKXMDSoASAFQAw%3D%3D&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;point&lt;/a&gt;, I can see that it is the exact place and the name of this place is Pointe de l&amp;rsquo;Observatoire. This happens to be the flag!&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{Pointe_de_l&#39;Observatoire}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;project-153-q4&#34;&gt;Project-153-Q4
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Thomas Yatangaki : Bro, I think, we did the gr90 the wrong way round.&lt;/p&gt;
+&lt;p&gt;Maboi 💪 : damn 💀 At least, the view was better at the end. Wait, do you see the place in the background in the middle ? We&amp;rsquo;ve got to get over there, what&amp;rsquo;s the name?&lt;/p&gt;
+&lt;p&gt;Thomas Yatangaki : No I don&amp;rsquo;t think we should 💀.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Egan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-4/challenge.jpg&#34;
+	width=&#34;4000&#34;
+	height=&#34;3000&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-4/challenge_hu324278540753998554.jpg 480w, http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-4/challenge_hu5311726614131937998.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;133&#34;
+		data-flex-basis=&#34;320px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I needed to find the name of the mounts in the background of the image. Reverse searching this image using Google Lens, I&amp;rsquo;m able to find the name of the place in a &lt;a class=&#34;link&#34; href=&#34;https://sr.wikiloc.com/rute-pjesacenje-po-planinama/bormes-les-mimosas-notre-dame-de-constance-32828412&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;post&lt;/a&gt; on a hiking website.&lt;/p&gt;
+&lt;p&gt;I then went into Google Maps and searched &lt;code&gt;Chapelle Notre-Dame de Constance&lt;/code&gt;. Going into street view, the &lt;a class=&#34;link&#34; href=&#34;https://www.google.com/maps/@43.1561787,6.3401265,3a,15.7y,134.04h,87.72t/data=!3m11!1e1!3m9!1sAF1QipNSbPcBAbMGunpAaaK-qP273ScI0AKbc32O1_wU!2e10!3e11!6shttps:%2F%2Flh3.googleusercontent.com%2Fp%2FAF1QipNSbPcBAbMGunpAaaK-qP273ScI0AKbc32O1_wU%3Dw900-h600-k-no-pi2.2848220531248984-ya38.03703992759836-ro0-fo100!7i10240!8i5120!9m2!1b1!2i40?entry=ttu&amp;amp;g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;chapel&lt;/a&gt; seems like the right place since I can see two islands in the back. Zooming all the way out on Maps, I see the name of the two islands, one of them being the flag.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{Île_du_Levant}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;project-153-q5&#34;&gt;Project-153-Q5
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Maboi 💪 : Bruh, the name of the mountain where I was lmao 🧠.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Egan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-5/challenge.jpg&#34;
+	width=&#34;13776&#34;
+	height=&#34;3712&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-5/challenge_hu13462420755189228566.jpg 480w, http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-5/challenge_hu3424068340185527852.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;371&#34;
+		data-flex-basis=&#34;890px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;For this challenge, I had to crop the image since it was too big for searching on Google. Once cropped I was able to find this AllTrails &lt;a class=&#34;link&#34; href=&#34;https://www.alltrails.com/trail/france/var/pointe-du-cerveau-et-le-gros-cerveau-vtt&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;post&lt;/a&gt;, which gave the name of the mountain.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{Gros_Cerveau}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;project-153-q6&#34;&gt;Project-153-Q6
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Thomas Yatangaki : unfortunately, it&amp;rsquo;s not part of project 153, but it&amp;rsquo;s still very beautiful here 😻.&lt;/p&gt;
+&lt;p&gt;Maboi 💪 : How many steps were there again ?&lt;/p&gt;
+&lt;p&gt;Flag format: ectf{number_zipcodeofthetown}&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Egan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-6/challenge.jpg&#34;
+	width=&#34;4000&#34;
+	height=&#34;3000&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-6/challenge_hu1112167876129387261.jpg 480w, http://localhost:1313/p/ectf-2025/OSINT/OSINT_1/SOLVED-OSINT_1_-_question-6/challenge_hu7185983741220741408.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;133&#34;
+		data-flex-basis=&#34;320px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This challenge was two-fold. I had to find the number of stairs in the image and also the zip code of the place. I was able to find this &lt;a class=&#34;link&#34; href=&#34;https://www.dreamstime.com/editorial-image-sunny-street-shops-restaurants-moustiers-sainte-marie-france-july-lovely-village-image97861020&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;page&lt;/a&gt; which gave the name of the place; Notre Dame de Beauvoir. Using this, I found the number of stairs on this &lt;a class=&#34;link&#34; href=&#34;https://provence-alpes-cotedazur.com/en/things-to-do/culture-and-heritage/places/chapelle-notre-dame-de-beauvoir-moustiers-sainte-marie-en-4067124/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;website&lt;/a&gt;. Finally, I used maps to get the postcode of the place.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{262_04360}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;steganography&#34;&gt;Steganography
+&lt;/h1&gt;&lt;h2 id=&#34;silhouette-in-cyberpunk&#34;&gt;Silhouette in Cyberpunk
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: I didn&amp;rsquo;t write down the description for this challenge but it was something to do with the given image.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Antoine&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/challenge.png&#34;
+	width=&#34;1777&#34;
+	height=&#34;1001&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/challenge_hu3569809714886899866.png 480w, http://localhost:1313/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/challenge_hu7940863817532860431.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;177&#34;
+		data-flex-basis=&#34;426px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This challenge was different, confusing at first but very fun. I used all the common stega tools (stegsolve, binwalk, exiftool) but nothing gave any clue. I had a closer look at the image and saw that there were dots on two of the buildings. I had a hunch that it was Braille (I don&amp;rsquo;t know how I thought about this as I&amp;rsquo;ve never seen the syntax of Braille). I had guessed correctly!&lt;/p&gt;
+&lt;p&gt;Using a &lt;a class=&#34;link&#34; href=&#34;https://abcbraille.com/braille&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Braille convertor&lt;/a&gt; and the dots from the first building I was able to get the first message.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/first.png&#34;
+	width=&#34;83&#34;
+	height=&#34;309&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/first_hu1012899334013595393.png 480w, http://localhost:1313/p/ectf-2025/Steganography/SOLVED-Silhouette-in-cyberpunk/first_hu12101752191281690483.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;26&#34;
+		data-flex-basis=&#34;64px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;⠹⠊⠎
+⠊⠎
+⠚⠥⠌
+⠁
+⠙⠥⠍
+⠍⠽⠂
+⠝⠊
+⠉⠑
+⠞⠗⠽ = this
+is
+just
+a
+dum
+my,
+ni
+ce
+try&lt;/p&gt;
+&lt;p&gt;Now I knew that I was on the right track.&lt;/p&gt;
+&lt;p&gt;I did the same with the building in the back left:&lt;/p&gt;
+&lt;p&gt;⠓⠼⠁⠙
+⠙⠼⠉⠝
+⠼⠁⠝
+⠹⠼⠉
+⠙⠼⠙
+⠗⠅⠝⠼
+⠉⠎⠎ = h14
+d3n
+1n
+th3
+d4
+rkn
+3ss&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{h1dd3n_1n_th3_d4rkn3ss}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;web&#34;&gt;Web
+&lt;/h1&gt;&lt;h2 id=&#34;java-weak-token&#34;&gt;Java Weak Token
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: The admin has stored a flag in the admin section, but he let you access the page since he has secured the access to it. Maybe you should show him why using a weak secret isn&amp;rsquo;t a good idea 🙂.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: Louis&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, the following website is presented:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/1.png&#34;
+	width=&#34;1891&#34;
+	height=&#34;857&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/1_hu4693837729555597743.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/1_hu1755179982714152187.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;220&#34;
+		data-flex-basis=&#34;529px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;We are shown our JWT token and somehow need to use this information to access the admin page. Going into Burp Suite, I can see that this exact token is being sent for authorisation.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/2.png&#34;
+	width=&#34;1285&#34;
+	height=&#34;400&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/2_hu13867841927541777351.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/2_hu3309345383118994785.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;321&#34;
+		data-flex-basis=&#34;771px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I used &lt;a class=&#34;link&#34; href=&#34;https://github.com/lmammino/jwt-cracker&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;this&lt;/a&gt; JWT cracker to find out what the secret is to maybe modify the JWT and pretend to be the admin.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/3.png&#34;
+	width=&#34;1088&#34;
+	height=&#34;226&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/3_hu11175601476372622146.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/3_hu14026956711088325389.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;481&#34;
+		data-flex-basis=&#34;1155px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/4.png&#34;
+	width=&#34;546&#34;
+	height=&#34;145&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/4_hu16480324874758276209.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/4_hu2296503325743282390.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;376&#34;
+		data-flex-basis=&#34;903px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s go! We got the secret. I can now modify the token using &lt;a class=&#34;link&#34; href=&#34;https://jwt.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;jwt.io&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/5.png&#34;
+	width=&#34;1699&#34;
+	height=&#34;945&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/5_hu10490793613671787761.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/5_hu393349552520622489.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;179&#34;
+		data-flex-basis=&#34;431px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I used the default HS256 algorithm, entered the secret and changed the username to admin. Next, I clicked on the &amp;ldquo;Can I access the admin page?&amp;rdquo; button and intercepted the request and replaced my token with the modified token.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/6.png&#34;
+	width=&#34;1616&#34;
+	height=&#34;729&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/6_hu18090041393338485656.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/6_hu11278750534809840955.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;221&#34;
+		data-flex-basis=&#34;532px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;And after hitting forward:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/7.png&#34;
+	width=&#34;1672&#34;
+	height=&#34;423&#34;
+	srcset=&#34;http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/7_hu8826140171023596714.png 480w, http://localhost:1313/p/ectf-2025/Web/SOLVED-Java-Weak-Token/7_hu8127108942755966571.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;395&#34;
+		data-flex-basis=&#34;948px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;ectf{JwT_T0keN_cR34t0r}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;thank-you&#34;&gt;Thank You
+&lt;/h1&gt;&lt;p&gt;If you’ve made it this far, I hope you’ve enjoyed this writeup and thank you for reading it! Thanks again to the &lt;a class=&#34;link&#34; href=&#34;https://ctftime.org/team/299061&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Cyber &amp;amp; Chill&lt;/a&gt; team for organising this CTF.&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>KnightCTF 2025 Writeup</title>
+        <link>http://localhost:1313/p/knightctf-2025/</link>
+        <pubDate>Wed, 22 Jan 2025 14:00:00 +1100</pubDate>
+        
+        <guid>http://localhost:1313/p/knightctf-2025/</guid>
+        <description>&lt;img src="http://localhost:1313/p/knightctf-2025/cover.png" alt="Featured image of post KnightCTF 2025 Writeup" /&gt;&lt;p&gt;I recently solo participated in the 24-hour KnightCTF. I placed 197th out of the 759 teams. Huge thanks to the &lt;a class=&#34;link&#34; href=&#34;https://knightctf.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Knight Squad&lt;/a&gt; for hosting this really fun CTF.&lt;/p&gt;
+&lt;h1 id=&#34;reverse-engineering&#34;&gt;Reverse Engineering
+&lt;/h1&gt;&lt;h2 id=&#34;binary-quest&#34;&gt;Binary Quest
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: In the far-off kingdom of Valoria, an ancient relic called the “Sacred Flag” lies hidden within a guarded fortress. Legend says only a true knight of cunning and skill can lay claim to its power. Dare you venture into the shadows and emerge victorious? Your journey begins now—onward, brave soul, and seize your destiny in the Binary Quest.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, we are given a binary file called &lt;code&gt;binary.quest&lt;/code&gt;. Before trying open it in Ghidra, I decided to run the &lt;code&gt;strings&lt;/code&gt; command on the file to see if anything interesting comes up. The following came up:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Binary_Quest/UPX.png&#34;
+	width=&#34;871&#34;
+	height=&#34;196&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Binary_Quest/UPX_hu6972227358367108965.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Binary_Quest/UPX_hu1984798623555130825.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;444&#34;
+		data-flex-basis=&#34;1066px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;This file has been packed with &lt;code&gt;UPX V4.24&lt;/code&gt;. After a bit of research, I found out that there is a UPX tool available to unpack the file, which I installed using the command &lt;code&gt;sudo apt install upx&lt;/code&gt;. I then unpacked the file using &lt;code&gt;upx -d binary.quest&lt;/code&gt;. I was now able to open the file using Ghidra to understand how the file works.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Binary_Quest/Ghidra1.png&#34;
+	width=&#34;937&#34;
+	height=&#34;888&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Binary_Quest/Ghidra1_hu7813350928835853846.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Binary_Quest/Ghidra1_hu3353594746170649058.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;105&#34;
+		data-flex-basis=&#34;253px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Most of the functions weren&amp;rsquo;t interesting but &lt;code&gt;FUN_00101Oa0&lt;/code&gt; seemed to be the way to go. The logic that checks if the users&amp;rsquo; input matches the flag is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Enter the sacred flag to complete your quest: &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;__isoc99_scanf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DAT_00102356&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_58&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;sVar2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;strlen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_58&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;FUN_00101330&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_58&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sVar2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0xffffffff&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;strcmp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_58&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_98&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;You have proven your valor, oh noble knight!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;The kingdom rejoices at your triumph, and the hidden flag is indeed yours.&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;Alas, you have failed this time. The quest remains unfulfilled...&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Return stronger and try again, brave knight.&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The program checks if the users&amp;rsquo; input (&lt;code&gt;local__58&lt;/code&gt;) is equal to the variable &lt;code&gt;local_98&lt;/code&gt;, which contains the flag.
+Looking at lines 42-45 we can see what the value of &lt;code&gt;local_98&lt;/code&gt; is, alongside two other variables:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_88&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_0_4_&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x7d5f3f59&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_98&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_8_4_&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x37695f73&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_98&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_0_8_&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x34575f7b4654434b&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;uStack_8c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x7334655f&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Decoding these hex values using CyberChef we get the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;local_88._0_4_ = }_?Y&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;local_98._8_4_ = 7i_s&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;local_98._0_8_ = 4W_{FTCK&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;uStack_8c = s4e_&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;FTCK&lt;/code&gt; is &lt;code&gt;KCTF&lt;/code&gt; backwards which is the format of the flags, so these values need to reversed and concatenated to get the flag.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{_W4s_i7_e4sY?_}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;easy-path-to-the-grail&#34;&gt;Easy Path to the Grail
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: Brave knight, your quest is simple yet essential—unlock the secrets hidden in this binary challenge and tread the path to the grail. The journey will test your wits as you reverse the provided binary, uncovering the treasure within.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, we are given a binary file called &lt;code&gt;grail.knight&lt;/code&gt;. Running &lt;code&gt;strings&lt;/code&gt; on the file doesn&amp;rsquo;t return anything interesting so I opened it in Ghidra. This time there are a few interesting functions &lt;code&gt;main&lt;/code&gt;, &lt;code&gt;transforming_input&lt;/code&gt; and &lt;code&gt;do_fight&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/Ghidra1.png&#34;
+	width=&#34;1013&#34;
+	height=&#34;782&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/Ghidra1_hu8702330924789208276.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/Ghidra1_hu5589627663304046841.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;310px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Inside the &lt;code&gt;main&lt;/code&gt; function, the program takes in the users&amp;rsquo; input (&lt;code&gt;local_198&lt;/code&gt;), runs the &lt;code&gt;transform_input&lt;/code&gt; function with the parameters as  &lt;code&gt;local_198&lt;/code&gt; and  &lt;code&gt;local_118&lt;/code&gt; which is an empty variable. It then checks if  &lt;code&gt;local_118&lt;/code&gt; is equal to some string value. If it is, then the users&amp;rsquo; input is the correct flag.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Enter the password (the original flag): &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__isoc99_scanf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;%127s&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_198&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;transform_input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_198&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_118&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;strcmp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_118&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;D2C22A62DEA62CCE9EFA0ECC86CE9AFA4ECC6EFAC6162C3636CC76E6A6BE&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Correct! The flag is %s&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_198&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Wrong password!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;uVar2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Looking at &lt;code&gt;transform_input&lt;/code&gt;, we can see:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;transform_input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;param_1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;param_2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bVar1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_28&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_28&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;param_2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;param_1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_20&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;bVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;do_fight&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;sprintf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_28&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;%02X&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ulong&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bVar1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;local_28&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_28&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_28&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;This function calls the &lt;code&gt;do_fight&lt;/code&gt; function, likely doing some sort of byte conversion, on each character of the input string &lt;code&gt;param_1&lt;/code&gt;, which is the users&amp;rsquo; input. Each byte is then converted as a two digit hexadecimal string and stored in &lt;code&gt;param_2&lt;/code&gt; which points to &lt;code&gt;local_118&lt;/code&gt; from the function call in &lt;code&gt;main&lt;/code&gt;. In &lt;code&gt;do_fight&lt;/code&gt;, the following can be seen:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;do_fight&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;param_1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_1c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;byte&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_1c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;param_1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;local_d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_1c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;local_1c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_1c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Given a byte, &lt;code&gt;do_fight&lt;/code&gt; will return the reverse. So given the string value that &lt;code&gt;local_118&lt;/code&gt; is compared with, we need to convert it into binary, reverse the binary and covert it to text, which will give us the flag. Doing this in CyberChef gives the following:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/CyberChef.png&#34;
+	width=&#34;1917&#34;
+	height=&#34;877&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/CyberChef_hu11364035713845799481.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Easy_Path_to_the_Grail/CyberChef_hu4693298991344084555.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;218&#34;
+		data-flex-basis=&#34;524px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{e4sy_p3asY_r3v_ch4ll3nge}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;knights-droid&#34;&gt;Knight&amp;rsquo;s Droid
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: For ages, a cryptic mechanical guardian has slumbered beneath the Knight’s Citadel. Some say it holds powerful secrets once wielded by ancient code-wielding Knights. Many have tried to reactivate the droid and claim its hidden knowledge—yet none have returned victorious. Will you be the one to solve its riddles and awaken this legendary machine?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, we are given an APK file called &lt;code&gt;knights_droid&lt;/code&gt;. I open it using &lt;code&gt;jadx knights_droid.apk&lt;/code&gt;. Inside the source code the following main function can be seen:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Main.png&#34;
+	width=&#34;1336&#34;
+	height=&#34;663&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Main_hu10527696822814764513.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Main_hu10526658102356799999.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;201&#34;
+		data-flex-basis=&#34;483px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;The program checks to see if the user has the right flag by calling the function &lt;code&gt;verifyFlag&lt;/code&gt; function from the &lt;code&gt;SecretKeyVerifier&lt;/code&gt; class.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Verifier.png&#34;
+	width=&#34;1345&#34;
+	height=&#34;675&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Verifier_hu2871886155045762745.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/Verifier_hu14804197626684981613.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;199&#34;
+		data-flex-basis=&#34;478px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Looking at the &lt;code&gt;SecretKeyVerifier&lt;/code&gt; class, it can be seen that the &lt;code&gt;verifyFlag&lt;/code&gt; function encodes the users&amp;rsquo; input and then compares it with &lt;code&gt;GYPB{_ykjcnwp5_GJECDP_u0q_c0p_uKqN_Gj1cd7_zN01z_}&lt;/code&gt;, which is most likely the flag. I guessed that it was probably some type of substitution cipher so I brute forced (ROT13) the string using CyberChef and got the following:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/CyberChef.png&#34;
+	width=&#34;1915&#34;
+	height=&#34;914&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/CyberChef_hu9497293558146672929.png 480w, http://localhost:1313/p/knightctf-2025/Reverse_Engineering/Knights_Droid/CyberChef_hu13410392906574855124.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;209&#34;
+		data-flex-basis=&#34;502px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{_congrat5_KNIGHT_y0u_g0t_yOuR_Kn1gh7_dR01d_}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;web&#34;&gt;Web
+&lt;/h1&gt;&lt;h2 id=&#34;knightcal&#34;&gt;KnightCal
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: In the realm of ancient codes, only those who enumerate correctly can unveil the hidden flag. Craft your mathematical expressions wisely and uncover the secrets that lie within.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Going to the given website the following calculator page is shown:
+&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Initial.png&#34;
+	width=&#34;932&#34;
+	height=&#34;596&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Initial_hu15913312810725449531.png 480w, http://localhost:1313/p/knightctf-2025/Web/KnightCal/Initial_hu7800901537736927978.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;156&#34;
+		data-flex-basis=&#34;375px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;After entering &lt;code&gt;1234&lt;/code&gt;, this output was given:
+&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Test1.png&#34;
+	width=&#34;924&#34;
+	height=&#34;732&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Test1_hu12731231341478186909.png 480w, http://localhost:1313/p/knightctf-2025/Web/KnightCal/Test1_hu2787489950332611345.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;126&#34;
+		data-flex-basis=&#34;302px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;It was clear that the numbers corresponded to letters in some way, so I decided to try all the digits:
+&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Test2.png&#34;
+	width=&#34;911&#34;
+	height=&#34;768&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Test2_hu15671708509998281351.png 480w, http://localhost:1313/p/knightctf-2025/Web/KnightCal/Test2_hu2851493597150841839.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;118&#34;
+		data-flex-basis=&#34;284px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Given this output, I wanted to try and create the word &lt;code&gt;flag&lt;/code&gt; as the website would then return &lt;code&gt;flag.txt&lt;/code&gt;. Given the output from above I used &lt;code&gt;7195&lt;/code&gt; as the input since:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;7 = f&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1 = l&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;9 = a&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;5 = g&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Flag.png&#34;
+	width=&#34;1011&#34;
+	height=&#34;734&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Web/KnightCal/Flag_hu8834776221068670465.png 480w, http://localhost:1313/p/knightctf-2025/Web/KnightCal/Flag_hu6098225488168784868.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{_c0ngR4t5_KNIGHT_f1naLLy_Y0U_g07_tH3_r1gh7_m4tH_}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;cryptography&#34;&gt;Cryptography
+&lt;/h1&gt;&lt;h2 id=&#34;reflections-in-the-random&#34;&gt;Reflections in the Random
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: We’ve uncovered a single string that’s saturated with possibilities. At first glance, it might resemble standard Base64 output—but every attempt to decode it directly results in chaotic gibberish.&lt;/p&gt;
+&lt;p&gt;Some agents suspect an unconventional passphrase or a stray cosmic phenomenon that shifted the bits; others whisper about symmetrical illusions that hide the real message. We even tried old-fashioned classical ciphers—simple shifts, sub-harmonic permutations, you name it—but the truth remains elusive.&lt;/p&gt;
+&lt;p&gt;All we know is that the message is said to be “spun backward from a single pivot,” though no one agrees what that means. Could it mean time is reversed? Maybe it’s an obscure numeric transformation. Rumor has it that if you find “the key,” everything falls into place. Or maybe it’s simpler than we think—just cleverly disguised.&lt;/p&gt;
+&lt;p&gt;Good luck dissecting this anomaly. Remember: “When the obvious leads nowhere, perhaps the solution sits right in front of you—only viewed from the wrong angle.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: pmsiam0&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We are given &lt;code&gt;Cipher.txt&lt;/code&gt; which contains the following text:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;chipher:  PzExcRcFHQsdOxF2cR0WEXIPOQQWAQk=&lt;/p&gt;
+&lt;p&gt;key = 0x42&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Given the challenge description, I know that during the decryption process, there must be some sort of reversal. I head to CyberChef and start trying different combinations. Since we are just given a key, I think that we need to use XOR somewhere. The key &lt;code&gt;0x42&lt;/code&gt; is the letter &lt;code&gt;B&lt;/code&gt;. Using this information, I decode it from Base64, reverse the output then XOR using the letter &lt;code&gt;B&lt;/code&gt;. This recipe gives the following:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Cryptography/Reflections_in_the_Random/CyberChef.png&#34;
+	width=&#34;1910&#34;
+	height=&#34;871&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Cryptography/Reflections_in_the_Random/CyberChef_hu10189525112920821354.png 480w, http://localhost:1313/p/knightctf-2025/Cryptography/Reflections_in_the_Random/CyberChef_hu9967124439033703475.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;219&#34;
+		data-flex-basis=&#34;526px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{M0ST_34Sy_I_GU3ss}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;forward-yet-it-falls-back&#34;&gt;Forward, Yet It Falls Back
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: We discovered a peculiar string that appears standard but yields gibberish under normal decoding. Some analysts detect suspicious symmetry, hinting at reflection or an inverted dimension. Others suspect hidden block boundaries or a “backwards encoding,” while a few insist it&amp;rsquo;s “rotated on a different axis.”&lt;/p&gt;
+&lt;p&gt;Our only clue: “Symbols may shift forward, but the key is often in reversing what we think is correct.”&lt;/p&gt;
+&lt;p&gt;Good luck peeling back the layers—sometimes you must step backward to see what’s right before you.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: pmsiam0&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In this challenge, we are given a text file that contains the following:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;base32: G7G2DGQ5SY4DCK5YVUDRROJI3UOAUUNTVR6XKDOKQO4CAAKK2MJA====&lt;/p&gt;
+&lt;p&gt;key = 0123456789ABCDEF&lt;/p&gt;
+&lt;p&gt;iv  = FEDCBA9876543210&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Again, I head to CyberChef and start experimenting. I know that the first step is to decode the string use Base32. From here, I know that I probably won&amp;rsquo;t be able to decode it using any simple cipher, given the challenge description. Given the hint &lt;em&gt;&amp;ldquo;Symbols may shift forward&amp;rdquo;&lt;/em&gt; and the fact that we are given a &lt;strong&gt;key&lt;/strong&gt; and &lt;strong&gt;iv&lt;/strong&gt;, I&amp;rsquo;m thinking it is some mode of AES.&lt;/p&gt;
+&lt;p&gt;After converting the decoded Base32 string to hex and decrypting the string in CBC using the given &lt;strong&gt;key&lt;/strong&gt; and &lt;strong&gt;iv&lt;/strong&gt; the following is given:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Cryptography/Forward_Yet_It_Falls_Back/CyberChef.png&#34;
+	width=&#34;1910&#34;
+	height=&#34;924&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Cryptography/Forward_Yet_It_Falls_Back/CyberChef_hu12109827601160182449.png 480w, http://localhost:1313/p/knightctf-2025/Cryptography/Forward_Yet_It_Falls_Back/CyberChef_hu16087835873990024410.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;206&#34;
+		data-flex-basis=&#34;496px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{R3vers3_R3vers3_D3C0DE}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;networks&#34;&gt;Networks
+&lt;/h1&gt;&lt;h2 id=&#34;server--attacker-ip&#34;&gt;Server &amp;amp; Attacker IP
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: In this challenge, I&amp;rsquo;ve crafted a series of intricate scenarios that will test your investigative skills. You&amp;rsquo;ll dive into a network of secrets, uncover hidden identities, and piece together the story of a complex cyber attack. Each step requires careful analysis and keen observation. There are total 17 challenges &amp;amp; 3 pcap files in this category. The files will be provided accordingly. The answers are there, but they won&amp;rsquo;t come easily—you&amp;rsquo;ll need to think like an attacker and act like a detective. Get ready to unravel the mystery and prove your prowess in this thrilling journey.&lt;/p&gt;
+&lt;p&gt;What are the server &amp;amp; attacker IPs?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: TareqAhamed (0xt4req)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge and all following network challenges, we&amp;rsquo;re given a &lt;code&gt;capture1.pcapng&lt;/code&gt; file. In this first challenge, we have to find the server and attacker IPs. Quickly scrolling over the file, I can see that there are a lot of &lt;code&gt;[SYN]&lt;/code&gt; TCP packets being sent from &lt;code&gt;192.168.1.9&lt;/code&gt; to &lt;code&gt;192.167.1.10&lt;/code&gt;. &lt;code&gt;192.167.1.10&lt;/code&gt; is then replying with &lt;code&gt;[RST, ACK]&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Networking/Server_&amp;amp;_Attacker_IP/WireShark.png&#34;
+	width=&#34;1917&#34;
+	height=&#34;1032&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Networking/Server_&amp;amp;_Attacker_IP/WireShark_hu16333368098523258420.png 480w, http://localhost:1313/p/knightctf-2025/Networking/Server_&amp;amp;_Attacker_IP/WireShark_hu2230862111140308416.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;185&#34;
+		data-flex-basis=&#34;445px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Since this exchange goes on for quite I while, I&amp;rsquo;m thinking that the attacker is &lt;code&gt;192.168.1.9&lt;/code&gt; and they are running some sort of port scan on the server at &lt;code&gt;192.167.1.10&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;192.168.1.10_192.168.1.9&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-intruders-identity&#34;&gt;The Intruder&amp;rsquo;s Identity
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: The attacker has gained access. Can you find out the username and password he used?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: TareqAhamed (0xt4req)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Looking at the packets, it&amp;rsquo;s clear that &lt;code&gt;192.167.1.10&lt;/code&gt; is a web server. I filter the packets using &lt;code&gt;ip.src == 192.168.1.9 &amp;amp;&amp;amp; http.request.method == POST &amp;amp;&amp;amp; ip.dst == 192.168.1.10&lt;/code&gt; and the first packet that comes up is to &lt;code&gt;/register&lt;/code&gt;. Looking at this packet the following details are found:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;HTML Form URL Encoded: application/x-www-form-urlencoded
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;_token&amp;#34; = &amp;#34;pLDuHThQ1RGo8gXsm7ZHtxYLr66KDMWMXJEt8GEa&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;name&amp;#34; = &amp;#34;TheExploiter&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;username&amp;#34; = &amp;#34;theexploiter&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;email&amp;#34; = &amp;#34;theexploiter@knightblog.com&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;password&amp;#34; = &amp;#34;exploiter@test&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;password_confirmation&amp;#34; = &amp;#34;exploiter@test&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Flag: &lt;code&gt;KCTF{theexploiter_exploiter@test}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-real-admin&#34;&gt;The Real Admin
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: Can you identify the real admin&amp;rsquo;s ip?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: TareqAhamed (0xt4req)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Filtering the packets using &lt;code&gt;http.request.method == POST &amp;amp;&amp;amp; ip.addr == 192.168.1.10&lt;/code&gt; doesn&amp;rsquo;t help because the attacker has used some sort of web enumeration tool to try and brute force the admins&amp;rsquo; password.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/Networking/The_Real_Admin/BF.png&#34;
+	width=&#34;1917&#34;
+	height=&#34;1029&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/Networking/The_Real_Admin/BF_hu2390196821513228108.png 480w, http://localhost:1313/p/knightctf-2025/Networking/The_Real_Admin/BF_hu857980077066939431.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;186&#34;
+		data-flex-basis=&#34;447px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;So the attackers&amp;rsquo; IP address needs to be filtered out.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;http.request.method == POST &amp;amp;&amp;amp; ip.addr == 192.168.1.10 &amp;amp;&amp;amp; !ip.addr == 192.168.1.9&lt;/code&gt; shows one packet with the details:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;171000	623.001452577	192.168.1.3	192.168.1.10	HTTP	128	POST /admin/blog/delete/3 HTTP/1.1  (application/x-www-form-urlencoded)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{192.168.1.3}&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;compromising-the-admin&#34;&gt;Compromising the Admin
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: The attacker managed to compromise the admin&amp;rsquo;s credentials. Identify the admin&amp;rsquo;s email and password.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: TareqAhamed (0xt4req)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Since we know that the attacker is trying to brute force the &lt;code&gt;/admin/login&lt;/code&gt; page with POST requests, I decide to filter the packets using this information:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;http.request.method == POST &amp;amp;&amp;amp; ip.addr == 192.168.1.10 &amp;amp;&amp;amp; ip.addr == 192.168.1.9 &amp;amp;&amp;amp; http.request.uri == &amp;quot;/admin/login&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I decide to use the information from the last packet since this would mean that either the attacker&amp;rsquo;s brute force ended unsuccessfully or they were able to get the right credentials.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;HTML Form URL Encoded: application/x-www-form-urlencoded
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;_token&amp;#34; = &amp;#34;lj41L7Wk6N6hZd7K5twHMghHSkruvwzX3JcV5GLj&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;email&amp;#34; = &amp;#34;admin@example.com&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Form item: &amp;#34;password&amp;#34; = &amp;#34;password&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Flag: &lt;code&gt;KCTF{admin@example.com_password}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;pwn&#34;&gt;PWN
+&lt;/h1&gt;&lt;h2 id=&#34;knights-bank&#34;&gt;Knight&amp;rsquo;s Bank
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: In the heart of the ancient kingdom lies the Knight Bank, a fortress of wealth guarded by its intricate magical arithmetic. Only the most cunning warriors who understand the secret vulnerabilities of numbers can uncover the hidden treasure buried deep within its vaults.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;For this challenge, we are given given an IP address and port to establish a netcat connection with (which I forgot to note down). We are also given a &lt;code&gt;knight_bank&lt;/code&gt; file, which is being run when we establish the netcat connection. Running the file gives:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/PWN/Knight_Bank/Output.png&#34;
+	width=&#34;1116&#34;
+	height=&#34;537&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/PWN/Knight_Bank/Output_hu17804216234660933999.png 480w, http://localhost:1313/p/knightctf-2025/PWN/Knight_Bank/Output_hu8491042180108433143.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;207&#34;
+		data-flex-basis=&#34;498px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Opening the file in Ghidra, there are two interesting functions &lt;code&gt;main&lt;/code&gt; and &lt;code&gt;win_prize&lt;/code&gt;. &lt;code&gt;main&lt;/code&gt; has the following logic:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;undefined8&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;undefined8&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uVar2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;uint&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Welcome to the Knight Bank!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Your current balance is: %u&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ulong&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Enter the amount you want to withdraw: &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;__isoc99_scanf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DAT_004020a0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;iVar1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_10&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0xf4241&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local_10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;You withdrew %u. Your new balance is %u.&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ulong&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ulong&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local_c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0xf4241&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Better luck next time!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nf&#34;&gt;win_prize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;uVar2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Error: You cannot withdraw more than 1,000,000 at a time.&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;uVar2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Invalid input. Exiting.&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;uVar2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;uVar2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;win_prize&lt;/code&gt; function:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;win_prize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;puts&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Congratulations! You win the prize!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;fflush&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;system&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;cat flag.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Given this information, we need to trigger the &lt;code&gt;else&lt;/code&gt; statement that calls &lt;code&gt;win_prize&lt;/code&gt;. After subtracting the users&amp;rsquo; input (which has to be less than 1,000,000 given the hex value &lt;code&gt;0xf4241&lt;/code&gt;) from the balance, the program checks if the result is less than 1,000,000. If it isn&amp;rsquo;t then we get the flag.&lt;/p&gt;
+&lt;p&gt;I decided in input 10,000 since it was larger than 1000 and less than 1,000,000. Since &lt;code&gt;local_c&lt;/code&gt; is a 32-bit unsigned integer, this would cause the subtraction to wrap around when it goes below 0. This gave the flag, however I forgot to note the flag down, so here is the output on my local machine:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Welcome to the Knight Bank!
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Your current balance is: 1000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Enter the amount you want to withdraw: 10000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;You withdrew 10000. Your new balance is 4294958296.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Congratulations! You win the prize!
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat: flag.txt: No such file or directory
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;knights-secret&#34;&gt;Knight&amp;rsquo;s Secret
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: Exploit &amp;amp; get the flag.&lt;/p&gt;
+&lt;p&gt;Connection Info: nc 45.56.68.122 1337&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We aren&amp;rsquo;t given any files for this challenge. Connecting to the server we can see this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;└─$ nc 45.56.68.122 1337
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;==================================================
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Welcome to the Knight&amp;#39;s Secret!
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;The castle&amp;#39;s vault holds a secret key, protected within the CONFIG dictionary.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;You are a knight tasked with proving the strength of the vault&amp;#39;s defenses.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;To succeed, you must craft an input to reveal the hidden key within the system.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;You will be provided with a user object representing a knight, with attributes &amp;#39;name&amp;#39; and &amp;#39;role&amp;#39;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Once you discover the key, input it again to receive the banner of victory.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Example of a safe template: &amp;#39;Greetings, {person_obj.name}, the {person_obj.role}.&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Type &amp;#39;hint&amp;#39; if you need guidance or &amp;#39;exit&amp;#39; to withdraw from the quest.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;==================================================
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Enter your secret: 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Entering the safe template given shows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Enter your secret: Greetings, {person_obj.name}, the {person_obj.role}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Output: Greetings, Brave Knight, the Defender of the Realm
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;After much trail and error I was able to figure out that the program running on the server would only taken in objects as input. So using this, we need to get the &lt;code&gt;CONFIG&lt;/code&gt; library. Using &lt;code&gt;{person_obj.__class__.__init__.__globals__}&lt;/code&gt; we can see the following:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Enter&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;your&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;secret&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;person_obj&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__class__&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__init__&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;__globals__&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Output&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;__name__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__doc__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__package__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__loader__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;_frozen_importlib_external&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SourceFileLoader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x72e3aa43b920&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__spec__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__annotations__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{},&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__builtins__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;module&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;builtins&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;built&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__file__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;/challenge/challenge.py&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__cached__&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;CONFIG&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;KEY&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;_KNIGHTSECRET2025_&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;Person&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;__main__.Person&amp;#39;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;fun&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fun&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x72e3aa422340&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;main&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;main&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x72e3aa200d60&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The key &lt;code&gt;_KNIGHTSECRET2025_&lt;/code&gt; has the flag. Entering &lt;code&gt;{person_obj.__class__.__init__.__globals__[CONFIG][KEY]}&lt;/code&gt; gives:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Enter your secret: {person_obj.__class__.__init__.__globals__[CONFIG]} 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Output: {&amp;#39;KEY&amp;#39;: &amp;#39;_KNIGHTSECRET2025_&amp;#39;} 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Enter your secret: {person_obj.__class__.__init__.__globals__[CONFIG][KEY]}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Congratulations, noble knight! You have unveiled the vault&amp;#39;s secret.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Here is your banner of victory: KCTF{_c0ngRaT5_Kn1GHT_Y0U_g07_THE_secreT_}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Flag: &lt;code&gt;KCTF{_c0ngRaT5_Kn1GHT_Y0U_g07_THE_secreT_}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;osint&#34;&gt;OSINT
+&lt;/h1&gt;&lt;h2 id=&#34;the-hidden-quest&#34;&gt;The Hidden Quest
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;: The journey begins even before the battle starts! 🕵️‍♂️&lt;/p&gt;
+&lt;p&gt;In the world of knights and hackers, not everything is as it seems. Somewhere in our recent posts, a secret lies hidden, waiting to be discovered. 🕵️‍♂️&lt;/p&gt;
+&lt;p&gt;Look closer, think sharper, and let your curiosity guide you. The answer is out there – will you find it? 🛡️&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Author&lt;/strong&gt;: NomanProdhan&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Given the challenge description, I decide to find all the different social media accounts of Knight Squad. Going to their &lt;a class=&#34;link&#34; href=&#34;https://knightctf.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;website&lt;/a&gt;, we can see at the bottom of their page that they have a Facebook, Twitter and Youtube account. I decide to start with their Facebook account. They have made several posts this year so I decide to go through them all. On one of the posts I see that one of the hashtags is #Flag. I double check this by looking at the tags for the other posts and this post is the only one that has it. After looking at the image, I saw the flag in the top left. The post is &lt;a class=&#34;link&#34; href=&#34;https://www.facebook.com/photo/?fbid=603615618984074&amp;amp;set=ecnf.100080069238184&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/knightctf-2025/OSINT/FB.jpg&#34;
+	width=&#34;1792&#34;
+	height=&#34;1024&#34;
+	srcset=&#34;http://localhost:1313/p/knightctf-2025/OSINT/FB_hu18290949660904876642.jpg 480w, http://localhost:1313/p/knightctf-2025/OSINT/FB_hu17687126467991478894.jpg 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;175&#34;
+		data-flex-basis=&#34;420px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Flag: &lt;code&gt;KCTF{w0W_y0U_G07_m3_}&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;thank-you&#34;&gt;Thank You
+&lt;/h1&gt;&lt;p&gt;If you&amp;rsquo;ve made it this far, I hope you&amp;rsquo;ve enjoyed this writeup and thank you for reading it! Thanks again to the Knight Squad for organising this CTF.&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,30 @@
+{{ define "head" }}
+    {{ $css := resources.Get "scss/categories.scss" | toCSS | minify }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{ end }}
+{{ define "main" }}
+  <!-- Display only the title of the category -->
+  <h1 class="category-title">
+    <a href="/">Home</a> /
+    {{ .Title }}
+  </h1>
+
+  <!-- List of categories -->
+  <ul class="category-list">
+    {{ range .Site.Taxonomies.categories }}
+      <li class="category-item">
+        <!-- Category Name -->
+        <a href="{{ .Page.Permalink }}" class="category-name">{{ .Page.Title }}</a>
+        <!-- Number of Categories -->
+        <div class="category-count">{{ .Count }} Posts</div>
+      </li>
+    {{ end }}
+  </ul>
+
+  <!-- Include footer -->
+  {{ partialCached "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}

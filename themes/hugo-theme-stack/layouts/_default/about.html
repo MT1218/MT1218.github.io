@@ -1,0 +1,22 @@
+{{ define "head" }}
+    {{ $css := resources.Get "scss/about.scss" | toCSS | minify }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+{{ end }}
+{{ define "main" }}
+  <!-- Display only the title of the category -->
+  <h1 class="about-title">
+    <a href="/">Home</a> /
+    <span class = "about-title">{{ .Title }}</span>
+  </h1>
+
+  <div class="about-content">
+    {{ partial "article/components/content" . }}
+  </div>
+  
+  <!-- Include footer -->
+  {{ partialCached "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}
