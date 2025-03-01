@@ -5,7 +5,7 @@
             {{ if eq .Parent (.GetPage "/") }}
                 {{ T "list.section" }}
             {{ else }}
-                <a href = "/{{ .Parent.Title }}">{{ .Parent.Title }}</a>
+                <a href = "/{{ .Parent.Title | lower}}">{{ .Parent.Title }}</a>
             {{ end }}
             / {{ .Title }}
         </h1>
