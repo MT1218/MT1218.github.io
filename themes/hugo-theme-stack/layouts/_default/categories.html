@@ -16,7 +16,11 @@
         <!-- Category Name -->
         <a href="{{ .Page.Permalink }}" class="category-name">{{ .Page.Title }}</a>
         <!-- Number of Categories -->
-        <div class="category-count">{{ .Count }} Posts</div>
+        {{ if eq .Count 1 }}
+          <div class="category-count">{{ .Count }} Post</div>
+        {{ else }}
+          <div class="category-count">{{ .Count }} Posts</div>
+        {{ end }}
       </li>
     {{ end }}
   </ul>

@@ -16,5 +16,5 @@ I'll be posting my CTF writeups and details about side projects that I've coded 
 --------|------
     manav.t12 | Discord
   [Link](https://linkedin.com/in/manav-thobhani-352018266) | LinkedIn
+  [Github Profile](https://github.com/MT1218) | Github
 
-More stuff coming soon!

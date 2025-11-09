@@ -13,7 +13,11 @@
         <div class="section-card">
             <div class="section-details">
                 <h1 class="section-term">{{ .Title }}</h1>
-                <h3 class="section-count">{{(len .Pages)}} Post(s)</h3>
+                {{ if eq (len .Pages) 1 }}
+                    <h3 class="section-count">{{(len .Pages)}} Post</h3>
+                {{ else }}
+                    <h3 class="section-count">{{(len .Pages)}} Post(s)</h3>
+                {{ end }}
                 {{ with .Params.description }}
                     <h2 class="section-description">{{ . }}</h2>
                 {{ end }}
