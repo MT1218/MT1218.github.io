@@ -26,7 +26,7 @@ This post is going to go through the entire project; from requirements to the fi
 
 ![Demonstration Image](images/demonstration.jpeg)
 
-All the source code for this project, that is referenced in this post, can be found in these two repositories (totally has a descriptive commit messages):
+All the source code for this project, that is referenced in this post, can be found in these two repositories (totally has descriptive commit messages):
 
 [ESP32 Bridge Controller Source Code](https://github.com/MT1218/ENGG3000-ESP32)
 
@@ -63,7 +63,7 @@ Based on the requirements above my team decided on using an **ESP32 DevKit v1** 
 
 - Shows the real time state of the bridge.
 - Allows the operator to switch between automatic and override modes.
-- Allow control of the bridge, gates and lights in override mode.
+- Allows control of the bridge, gates and lights in override mode.
 - Sends a heartbeat message to the ESP32 every 2 seconds to maintain connection.
 
 ### High Level Diagram
@@ -1745,7 +1745,7 @@ private void handleStatusUpdate(String message) {
 
 ### Heartbeat Class
 
-This thread runs indepedent to the other the other threads so that the ESP32 knows the connection with the Java program is alive:
+This thread runs independent to the other threads so that the ESP32 knows the connection with the Java program is alive:
 
 ```Java
 package mcp;
@@ -1828,7 +1828,7 @@ public class App {
     // Initialise the GUI with the send object
     userInterface.initializeSender(guiSendObject);
 
-    // Create and run the threat to send heartbeat messages
+    // Create and run the thread to send heartbeat messages
     Heartbeat heartBeatThread = new Heartbeat(heartBeatSendObject, userInterface);
     heartBeatThread.start();
 
@@ -1869,6 +1869,6 @@ This project has taught me so much about designing a system from scratch and abo
 
 # Conclusion
 
-This project was insanely fun and the things I learnt are invaluable. All the late night debugging sessions paid off and our demonstration was pretty smooth other than a mechnical issue we had. For a 15 week university project, I'm really proud of what we created from scratch and a budget of $100. I'm also really happy with the multi-threaded design of both programs and safety architecture that we implemented. If I had to take away one thing from this project it would be our "what if" approach. This approach ensured that we were always proactive with all the problems rather than reactive. All the source code is available on Github as mentioned [above](#what-was-the-project).
+This project was insanely fun and the things I learnt are invaluable. All the late night debugging sessions paid off and our demonstration was pretty smooth other than a mechanical issue we had. For a 15 week university project, I'm really proud of what we created from scratch and a budget of $100. I'm also really happy with the multi-threaded design of both programs and safety architecture that we implemented. If I had to take away one thing from this project it would be our "what if" approach. This approach ensured that we were always proactive with all the problems rather than reactive. All the source code is available on Github as mentioned [above](#what-was-the-project).
 
 I hope you enjoyed this post as much as I enjoyed in creating the project.
