@@ -7,7 +7,7 @@ menu:
             icon: user
 ---
 # Who am I?
-Hello there and welcome to my website! I'm currently a third year student studying `Software Engineering` and `Cyber Security`.
+Hello there and welcome to my website! I'm currently a fourth year student studying `Software Engineering` and `Cyber Security`.
 
 I'll be posting my CTF writeups and details about side projects that I've coded on this website :)
 
